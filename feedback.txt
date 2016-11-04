@@ -1,0 +1,36 @@
+Feedback Obtained from Team Pranav and Neha:
+
+About the objectives : Clear and interesting.
+
+About the visual elements:
+1. Word Cloud filtering : Innovative. Mostly aesthetic appeal but with less value in 
+filtering. Since the words would be in proportion to the number of movies in each 
+category, rare genres might be printed small and obscurely. So for filtering and selection
+purposes, a better visualisation could be chosen.
+
+2. Populate the table more since that is the final goal. It should be more informative.
+Maybe stars in the form of ratings.
+
+3. Map colouring should encode some data.
+
+4. Animation of the graph is good and a good objective as an optional feature.
+
+5. Maybe a search box?
+
+
+How we incorporated it :
+
+1. We have found a different visualisation in the place of a Word Cloud. We are using a
+text boxes and tables in its place with various narks and channels.
+
+2. The table now has more columns and as planned before, a hover tooltip and on clicking 
+it gives more information and the graph.
+
+3. We have made all our visualisations appear in a continuous, dynamic flow in one page 
+with correlations.
+
+4. Map will have colour intensity encoding number of movies in the region.
+
+5. We are still wondering about whether we will include a search box and how it will 
+interact with the other visualisations we have.
+ 
