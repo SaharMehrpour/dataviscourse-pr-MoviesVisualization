@@ -239,6 +239,8 @@ Graph.prototype.update = function(selectedMovie) {
         });
 
     nodeGroupEnter.append("text")
+        .attr("x",10)
+        .attr("y",-10)
         .text(function(d) {
             return d.id;
         })
