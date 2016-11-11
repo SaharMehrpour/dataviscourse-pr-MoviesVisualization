@@ -230,8 +230,9 @@ Graph.prototype.update = function(selectedMovie) {
                 .style("visibility","visible");
         })
         .on("mouseleave", function(d) {
-            if (d.id === selectedMovie.movie_title)
-                return "visible";
+            if (d3.select(this.parentNode).classed("selectedMovie"))
+                d3.select(this.parentNode).select("text")
+                    .style("visibility", "visible");
             else
                 d3.select(this.parentNode).select("text")
                     .style("visibility","hidden");
