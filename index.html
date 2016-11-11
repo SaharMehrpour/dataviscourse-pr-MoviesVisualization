@@ -9,19 +9,24 @@
     <script type="text/javascript" src="lib/d3/d3.js"></script>
     <script type="text/javascript" src="lib/d3-tip/index.js"></script>
     <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
 </head>
 
 <body>
 
 
 <div class="container">
-    <div class="container">
-        <div id="year_filter_div"></div>
-        <div id="rating_genre_filter_div"></div>
-        <div id="map_filter_div"></div>
-        <div id="table_div"></div>
-        <div id="information_div"></div>
-        <div id="graph_div" class=view"></div>
+    <div class="">
+        <div class="leftColumn">
+            <div id="year_filter_div">Year Filter</div>
+            <div id="rating_genre_filter_div">Genre/Rating Filter</div>
+            <div id="map_filter_div"></div>
+            <div id="table_div"></div>
+        </div>
+        <div class="rightColumn">
+            <div id="graph_div" class=view">Graph</div>
+            <div id="information_div"></div>
+        </div>
     </div>
 </div>
 

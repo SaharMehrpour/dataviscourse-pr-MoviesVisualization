@@ -17,7 +17,7 @@
 
                             var mapFilter = new MapFilter(movies, interactivity);
 
-                            var table = new Table(interactivity);
+                            var table = new Table(movies,interactivity);
                             var information = new Information(movies, oscarActors, oscarActresses,
                                 oscarDirector, oscarPictures, interactivity);
 
