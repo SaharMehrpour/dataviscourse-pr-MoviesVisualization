@@ -4,3 +4,30 @@
     width: 80%;
     margin: 0 auto;
 }
+
+.content {
+    display: inline-block;
+    width: 70%;
+}
+
+.links {
+    stroke:#000;
+    stroke-width:0.1px;
+}
+
+.nodes {
+    r:5;
+    font-size:12px;
+}
+
+.artist {
+    fill:#000;
+}
+
+.movie {
+    fill:#f00;
+}
+
+.selectedMovie {
+    fill:#0f0;
+}
