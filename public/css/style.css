@@ -72,9 +72,8 @@ div.table {
     background-color: aquamarine;
 }
 
-#map_filter_div {
-    height: 90px;
-    background-color: darkgray;
+#map_filter_div{
+height:900;
 }
 
 #rating_genre_filter_div {
