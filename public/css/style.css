@@ -1,6 +1,88 @@
 .container {
     position: relative;
     padding: 12px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.leftColumn {
+    width: 70%;
+    float: left;
+}
+
+.rightColumn {
+    width: 30%;
+    float: left;
+}
+
+/* Test styles */
+
+div.data {
+    position: absolute;
+    width: 90px;
+    padding: 0 5px;
+}
+
+div.head {
+    position: relative;
+}
+
+div.datarow {
+    position: absolute;
+    width: 100%;
+    border-top: 2px black solid;
+    height: 35px;
+    overflow: hidden;
+}
+
+div.table {
+}
+
+#table_div  {
+    position: relative;
+    padding: 12px;
     width: 80%;
     margin: 0 auto;
+}
+
+#information_div {
+    height: 100%;
+    position: relative;
+}
+.level0{
+    background-color: whitesmoke;
+}
+
+.level1{
+    background-color: papayawhip;
+}
+
+.level2{
+    background-color: lightsteelblue;
+}
+
+.level3{
+    background-color: lightgray;
+}
+
+/* Temp */
+
+#graph_div {
+    height: 70px;
+    background-color: aquamarine;
+}
+
+#map_filter_div {
+    height: 90px;
+    background-color: darkgray;
+}
+
+#rating_genre_filter_div {
+    height:30px;
+    background-color: blanchedalmond;
+}
+
+#year_filter_div {
+    height: 20px;
+    background-color: cornflowerblue;
 }
