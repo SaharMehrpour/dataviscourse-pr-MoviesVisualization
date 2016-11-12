@@ -17,7 +17,7 @@ function drawMap(world) {
         //.enter()
         //.append("path")
     //.attr("d", path);
-   var svg = d3.select("#map").append("svg")//.attr("width","800").attr("height","700")
+   var svg = d3.select("#map").classed("content",true).append("svg");//.attr("width","800").attr("height","700")
     var path = d3.geoPath().projection(projection)
     d3.json("data/world.json",function(json){
         var map=svg.selectAll("path")

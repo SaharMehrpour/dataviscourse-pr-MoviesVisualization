@@ -7,7 +7,7 @@ function RatingGenreFilter(movies, interactivity) {
 
     self.interactivity = interactivity;
     self.movies = movies;
-    self.div = d3.select("#rating_genre_filter_div");
+    self.div = d3.select("#rating_genre_filter_div").classed("content",true);
 
     self.init();
 };
