@@ -47,7 +47,7 @@ div.table {
 
 .content {
     display: inline-block;
-    width: 70%;
+    width: 100%;
 }
 
 .links {
@@ -99,9 +99,8 @@ div.table {
     background-color: aquamarine;
 }
 
-#map_filter_div {
-    height: 90px;
-    background-color: darkgray;
+#map_filter_div{
+height:900;
 }
 
 #rating_genre_filter_div {
