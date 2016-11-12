@@ -8,7 +8,7 @@ function YearFilter(movies, interactivity) {
     self.interactivity = interactivity;
     self.movies = movies;
 
-    self.div = d3.select("#year_filter_div");
+    self.div = d3.select("#year_filter_div").classed("content",true);
 
     self.init();
 };
