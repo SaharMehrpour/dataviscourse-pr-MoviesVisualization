@@ -96,7 +96,6 @@ div.table {
 
 #graph_div {
     height: 70px;
-    background-color: aquamarine;
 }
 
 #map_filter_div{
@@ -105,10 +104,8 @@ height:900;
 
 #rating_genre_filter_div {
     height:30px;
-    background-color: blanchedalmond;
 }
 
 #year_filter_div {
     height: 20px;
-    background-color: cornflowerblue;
 }

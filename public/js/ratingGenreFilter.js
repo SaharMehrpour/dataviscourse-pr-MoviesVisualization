@@ -32,7 +32,7 @@ RatingGenreFilter.prototype.init = function(){
     self.svg = divyearChart.append("svg")
         .attr("width",self.svgWidth)
         .attr("height",self.svgHeight)
-        .style("background-color", "Silver");
+        .style("background-color", "Tan");
 
 //"Action","Adventure","Animation","Comedy","Crime","Family","Fantasy","Thriller","Sci-Fi","Drama","Mystery"
     // ,"Romance","Biography","History"," War","Horror","Sport","Western","Documentary","Music/Musical","Short","Film-Noir"
@@ -179,6 +179,27 @@ RatingGenreFilter.prototype.init = function(){
             .style("fill", function (d) {
                 return color(d.count);
             })
+
+        leg=self.svg.append("g")
+            .attr("class", "legendQuantile")
+            .style("font-size",10)
+            .attr("transform","translate(50,20)");
+
+        var legendQuantile = d3.legendColor()
+                .shapeWidth(70)
+                .cells(10)
+                .orient('horizontal')
+                .scale(color)
+            ;
+
+        leg.call(legendQuantile);
+
+
+
+
+
+
+
     })
 
 
