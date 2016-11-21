@@ -147,24 +147,54 @@
     height:40px;
 }
 
-/* Temp */
+/* Graph Styles */
 
 #graph_div {
-    height: 70px;
-    background-color: lightgray;
+    height: 150px;
 }
+
+.content {
+    display: inline-block;
+    width: 100%;
+}
+
+.links {
+    stroke:#000;
+    stroke-width:0.1px;
+}
+
+.nodes {
+    r:5;
+    font-size:12px;
+}
+
+.artist {
+    fill:#000;
+}
+
+.movie {
+    fill:#f00;
+}
+
+.selectedMovie {
+    fill: #0f0;
+}
+
+/* Map Styles */
+
 
 #map_filter_div {
-    height: 90px;
-    background-color: darkgray;
+    height: 900px;
 }
+
+/* rating-genre styles */
 
 #rating_genre_filter_div {
-    height:30px;
-    background-color: gainsboro;
+    height:600px;
 }
 
+/* year filter styles*/
+
 #year_filter_div {
-    height: 20px;
-    background-color: beige;
+    height: 100px;
 }
