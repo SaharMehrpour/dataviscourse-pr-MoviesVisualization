@@ -26,6 +26,20 @@ Information.prototype.init = function() {
 
     self.div.append("h1")
         .attr("id", "info_movie_title");
+    self.div
+        .append("svg")
+        .attr("id", "starSvg")
+        .append("defs")
+        .append('pattern')
+        .attr('id', 'stars')
+        .attr('patternUnits', 'userSpaceOnUse')
+        .attr('width', 100)
+        .attr('height', 35)
+        .append("image")
+        .attr("xlink:href", "data/stars2.png")
+        .attr('width', 100)
+        .attr('height', 35);
+
     self.div.append("span")
         .attr("id", "academy_logo");
     self.div.append("h2")
@@ -41,9 +55,10 @@ Information.prototype.init = function() {
     self.div.append("h3")
         .attr("id", "budget");
     self.div.append("p")
-        .attr("id","plot");
+        .attr("id", "plot");
     self.div.append("img")
         .attr("id", "poster");
+
 
     var data = d3.nest().key(function (d) {
         return d["country"]
@@ -53,14 +68,14 @@ Information.prototype.init = function() {
         }).entries(leaves);
     })
         .entries(self.movies);
-    data.sort(function (a,b) {
-        return d3.descending(a.key,b.key);
+    data.sort(function (a, b) {
+        return d3.descending(a.key, b.key);
     });
 
 
 // Update
 
-    var selectedMovie = self.movies[35];
+    var selectedMovie = self.movies[0];
 
     // Data Binding
 
@@ -101,7 +116,6 @@ Information.prototype.init = function() {
 
     self.div.select("#info_movie_title")
         .text(selectedMovie["movie_title"] + " (" + selectedMovie["title_year"] + ")");
-
     self.div.select("#director")
         .text(selectedMovie["director_name"] + " (" + directorMovie.values.length + " movies)");
     self.div.select("#actor_1")
@@ -118,6 +132,24 @@ Information.prototype.init = function() {
     var posterURL = self.getPosterAndPlot(selectedMovie["movie_imdb_link"]);
     self.getAcademyInfo(selectedMovie);
 
+    //console.log(selectedMovie["imdb_score"]);
+
+    var rects = self.div.select("#starSvg").selectAll("rect")
+        .data([selectedMovie["imdb_score"] * 20, Math.max(0, (selectedMovie["imdb_score"] - 5) * 20)]);
+
+    rects.enter()
+        .append("rect")
+        .merge(rects)
+        .attr("x", 0)
+        .attr("y", function (d, i) {
+            if (i == 0) return 0;
+            return 17;
+        })
+        .attr("width", function (d) {
+            return Math.min(100, d);
+        })
+        .attr("height", 17)
+        .attr("fill", "url(#stars)");
 };
 
 /*
@@ -135,7 +167,7 @@ Information.prototype.getPosterAndPlot = function (imdbURL) {
     var self = this;
     var splittedHash = imdbURL.split("/");
 
-    var jsonSite = "http://www.omdbapi.com/?i=" + splittedHash[4];
+    var jsonSite = "https://www.omdbapi.com/?i=" + splittedHash[4];
 
     d3.json(jsonSite,function (json) {
         //console.log(json);

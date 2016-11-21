@@ -15,97 +15,156 @@
     float: left;
 }
 
-/* Test styles */
+/* Table div styles */
 
-div.data {
-    position: absolute;
-    width: 90px;
-    padding: 0 5px;
-}
-
-div.head {
+#table_div  {
     position: relative;
+    padding: 12px;
+    width: 90%;
+    margin: 0 auto;
 }
 
-div.datarow {
-    position: absolute;
+.level0{
+    background-color: linen;
+}
+
+.level1{
+    background-color: lavenderblush;
+}
+
+.level2{
+    background-color: papayawhip;
+}
+
+.level3{
+    background-color: palegoldenrod;
+}
+
+.header{
+    border-top: solid 2px lightgray;
+    border-bottom: solid 2px lightgray;
+    width: 100%;
+    border-top: 2px black solid;
+    height: 55px;
+    overflow: hidden;
+}
+
+.tableRow {
     width: 100%;
     border-top: 2px black solid;
     height: 35px;
     overflow: hidden;
 }
 
-div.table {
+.tableCell{
+    position: absolute;
+    width: 60px;
+    padding: 0 5px;
 }
 
-#table_div  {
-    position: relative;
-    padding: 12px;
-    width: 80%;
-    margin: 0 auto;
+.tableCell1 { /* Test */
+    position: absolute;
+    width: 150px;
+    padding: 0 5px;
 }
 
-.content {
-    display: inline-block;
+.tableCell2 { /* Test */
+    position: absolute;
+    width: 90px;
+    padding: 0 5px;
+}
+
+.tableCell3 { /* Test */
+    position: absolute;
+    width: 60px;
+    padding: 0 5px;
+}
+
+.tableBody {
     width: 100%;
+    position: relative;
+    height: auto;
+    max-height: 1000px;
+    overflow-y: auto;
 }
 
-.links {
-    stroke:#000;
-    stroke-width:0.1px;
+.expand {
+    /*background-color: floralwhite;*/
 }
 
-.nodes {
-    r:5;
-    font-size:12px;
+.movieRow {
+    font-weight: bold;
 }
 
-.artist {
-    fill:#000;
+.box {
+    padding-left: 2px;
 }
 
-.movie {
-    fill:#f00;
+.sortOptionSvg {
+    height: 50px;
+    width: 330px; /* 3 * (filters + padding) */
 }
 
-.selectedMovie {
-    fill: #0f0;
+.sortOption {
+    height: 40px;
+    width: 100px;
+    fill: blanchedalmond;
 }
+
+.textFilter {
+    text-anchor:start;
+}
+
+.active {
+    fill: lightblue;
+}
+
+.buttonDiv {
+    height:40px;
+    padding: 10px;
+}
+
+.button {
+    height: 40px;
+    width: 70px;
+    fill: linen;
+}
+
+.textButton {
+    text-anchor:start;
+}
+
+/* Information div styles */
 
 #information_div {
     height: 100%;
     position: relative;
 }
-.level0{
-    background-color: whitesmoke;
-}
 
-.level1{
-    background-color: papayawhip;
-}
-
-.level2{
-    background-color: lightsteelblue;
-}
-
-.level3{
-    background-color: lightgray;
+/* Stars */
+#starSvg {
+    width: 100px;
+    height:40px;
 }
 
 /* Temp */
 
 #graph_div {
     height: 70px;
+    background-color: lightgray;
 }
 
-#map_filter_div{
-height:900;
+#map_filter_div {
+    height: 90px;
+    background-color: darkgray;
 }
 
 #rating_genre_filter_div {
     height:30px;
+    background-color: gainsboro;
 }
 
 #year_filter_div {
     height: 20px;
+    background-color: beige;
 }

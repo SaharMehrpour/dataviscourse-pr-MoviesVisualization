@@ -1,0 +1,53 @@
+.container {
+    position: relative;
+    padding: 12px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.leftColumn {
+    width: 70%;
+    float: left;
+}
+
+.rightColumn {
+    width: 30%;
+    float: left;
+}
+
+/* Test styles */
+
+div.data {
+    position: absolute;
+    width: 190px;
+    padding: 0 5px;
+    border: 2px lightgrey solid;
+}
+
+div.head {
+    position: relative;
+}
+
+div.datarow {
+    position: absolute;
+    width: 100%;
+    border-top: 2px black solid;
+    background: white;
+    height: 35px;
+    overflow: hidden;
+}
+
+div.table {
+}
+
+#table_div  {
+    position: relative;
+    padding: 12px;
+    width: 80%;
+    margin: 0 auto;
+}
+
+#information_div {
+    height: 100%;
+    position: relative;
+}
