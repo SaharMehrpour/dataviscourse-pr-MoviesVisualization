@@ -4,6 +4,8 @@
     function init() {
         //Creating instances for each visualization
 
+        openNav();
+
         var interactivity = new Interactivity();
 
         d3.csv("data/movie_metadata_cleared.csv", function (error, movies) {
@@ -63,10 +65,12 @@
 
 /* Set the width of the side navigation to 250px */
 function openNav() {
-    document.getElementById("sideBar").style.width = "100%";
+    document.getElementById("sideBar").style.width = "50%";
+    document.getElementById("main").style.marginLeft = "50%";
 }
 
 /* Set the width of the side navigation to 0 */
 function closeNav() {
     document.getElementById("sideBar").style.width = "0";
+    document.getElementById("main").style.marginLeft = "0";
 }
