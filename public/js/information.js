@@ -36,7 +36,7 @@ Information.prototype.init = function() {
         .attr('width', 100)
         .attr('height', 35)
         .append("image")
-        .attr("xlink:href", "data/stars2.png")
+        .attr("xlink:href", "data/stars.png")
         .attr('width', 100)
         .attr('height', 35);
 
@@ -75,7 +75,15 @@ Information.prototype.init = function() {
 
 // Update
 
-    var selectedMovie = self.movies[0];
+    self.update(self.movies[1]);
+
+};
+
+/*
+ Fill the form
+ */
+Information.prototype.update = function(selectedMovie) {
+    var self = this;
 
     // Data Binding
 
@@ -150,15 +158,6 @@ Information.prototype.init = function() {
         })
         .attr("height", 17)
         .attr("fill", "url(#stars)");
-};
-
-/*
- Fill the form
- */
-Information.prototype.update = function(selectedMovie) {
-    var self = this;
-
-
 
 };
 
@@ -220,12 +219,14 @@ Information.prototype.getAcademyInfo = function (selectedMovie) {
         oscars.push(1);
 
 
-    self.div.select("#academy_logo")
+    var statues = self.div.select("#academy_logo")
         .selectAll("img")
-        .data(oscars)
+        .data(oscars);
+    statues
         .enter()
         .append("img")
-        .attr("src","data/academy.jpg")
+        .attr("src","data/academy.jpg");
+    statues.exit().remove();
 
 
 };

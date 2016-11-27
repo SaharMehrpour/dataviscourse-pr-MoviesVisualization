@@ -9,14 +9,15 @@ function Table(movies,interactivity) {
     self.interactivity = interactivity;
 
     self.div = d3.select("#table_div");
-    self.cellWidth = +(self.div.style("width").split("px")[0])/5;
     self.cellHeight = 40;
 
-    self.xScaleBudget = d3.scaleLog()
-        .range([0,90]); // tabelCell2
+    self.tableDivsWidth = parseInt(window.getComputedStyle(document.getElementById("table_div"),null).getPropertyValue("width"),10);
+
+    self.xScaleBudget = d3.scaleLinear()
+        .range([0,0.18 * self.tableDivsWidth]); // headerCell2
 
     self.xScaleGross = d3.scaleLog()
-        .range([0,60]); // tabelCell3
+        .range([0,0.18 * self.tableDivsWidth]); // headerCell3
 
     self.init();
 };
@@ -27,35 +28,46 @@ function Table(movies,interactivity) {
 Table.prototype.init = function() {
     var self = this;
 
-    self.filters = [["title_year", "Year"], ["country", "Country"], ["imdb_score", "IMDB Score"]];
-    self.header = ["", "number Of Movies", "Rating", "Budget", "Gross"];
+    self.sortOptions = [{"Option": "title_year", "Text": "Year", "Order": 0},
+        {"Option": "country", "Text": "Country", "Order": 1},
+        {"Option": "imdb_score", "Text": "IMDB Score", "Order": 2},
+        {"Option": "alph", "Text": "Alphabetical", "Order": 3},
+        {"Option" : "gross", "Text" : "Gross", "Order": 4},
+        {"Option" : "budget", "Text" : "Budget", "Order": 5},
+        {"Option" : "content_rating", "Text" : "Content Rating", "Order": 6}];
 
-    self.computeXscales(self.movies);
+
+    self.optionWidth = self.tableDivsWidth / (self.sortOptions.length + 3); // 80
+    self.optionPadding = self.optionWidth / 10; // 10
+
+    self.optionLocation = {
+        "minAllowedX": 0,
+        "maxAllowedX": (self.optionWidth + self.optionPadding) * self.sortOptions.length + self.optionPadding,
+        "textX": 5,
+        "textY": 25 // rectHeight / 2
+    };
 
     self.createSortOptions();
+
+    self.header = ["number Of Movies", "Rating", "Budget", "Gross"];
+
+    self.computeXscales(self.movies);
 
     var header = self.div.append("div").attr("class", "header") // tableRow")
         .selectAll("tableCell")
         .data(self.header)
         .enter()
         .append("div")
-        //.attr("class", "tableCell")
-        .attr("class", function (d, i) { // Test!
-            if (i == 0) return "tableCell1";
-            if (i == 1) return "tableCell2";
-            if (i == 2) return "tableCell3";
-            return "tableCell";
+        .attr("class", function (d, i) {
+            return "headerCell headerCell" + i;
         })
         .html(function (d) {
             return d
-        })
-        .style("left", function (d, i) {
-            return (i * self.cellWidth) + "px"
         });
 
-    header.each(function (d,i) {
-        if (i == 3 || i == 4) {
-            var scale = i == 3 ? self.xScaleBudget : self.xScaleGross;
+    header.each(function (d, i) {
+        if (i == 2 || i == 3) {
+            var scale = (i == 2) ? self.xScaleBudget : self.xScaleGross;
             d3.select(this)
                 .append("svg")
                 .append("g")
@@ -70,7 +82,6 @@ Table.prototype.init = function() {
 
     var body = self.div.append("div").attr("class", "tableBody")
         .attr("id", "tableBody");
-
 
     self.populateTable("#tableBody", self.nestedData(self.movies, "id", 0));
 
@@ -90,7 +101,6 @@ Table.prototype.populateTable = function(parentDivId,data) {
         .style("top", function (d, i) {
             return (i * self.cellHeight) + "px"
         })
-        .attr("class", "box")
         .append("div")
         .attr("id", function (d) {
             return d["id"];
@@ -110,13 +120,11 @@ Table.prototype.populateTable = function(parentDivId,data) {
                 self.shrinkRows(d["id"]);
             }
         })
-        .style("top", "0px")
-        .transition()
-        .duration(2000)
         .style("top", function (d, i) {
             return (i * self.cellHeight) + "px"
         });
 
+    var cellLeft = 0;
 
     var cells = self.div.select(parentDivId)
         .selectAll(".summaryRow")
@@ -127,17 +135,16 @@ Table.prototype.populateTable = function(parentDivId,data) {
         })
         .enter()
         .append("div")
-        //.attr("class", "tableCell")
-        .attr("class", function (d, i) { // Test!
-            if (i == 0) return "tableCell1";
-            if (i == 1) return "tableCell2";
-            if (i == 2) return "tableCell3";
-            return "tableCell";
+        .attr("class", function (d, i) {
+            return "tableCell tableCell" + i;
         })
         .each(function (d, i) {
             if (i == 2) { // Stars
                 var svg = d3.select(this)
                     .append("svg");
+
+                var thisCellWidth = parseInt(d3.select(this).style("width"),10);
+
                 svg
                     .append("defs")
                     .append('pattern')
@@ -154,10 +161,11 @@ Table.prototype.populateTable = function(parentDivId,data) {
                     .attr("x", 0)
                     .attr("y", 0)
                     .attr("width", function () {
-                        return Math.min(100, d.value * 20);
+                        return Math.min(100, d.value * 10);
                     })
-                    .attr("height", 17)
+                    .attr("height", 35)
                     .attr("fill", "url(#stars)");
+                /*
                 svg
                     .append("rect")
                     .attr("x", 0)
@@ -167,6 +175,7 @@ Table.prototype.populateTable = function(parentDivId,data) {
                     })
                     .attr("height", 17)
                     .attr("fill", "url(#stars)");
+                    */
             }
             else if (i == 3 || i == 4) { // Box Plot for Budget or Gross
 
@@ -179,7 +188,7 @@ Table.prototype.populateTable = function(parentDivId,data) {
 
                     var scale = i == 3 ? self.xScaleBudget : self.xScaleGross;
 
-                    var svg = d3.select(this)
+                    svg = d3.select(this)
                         .append("svg");
 
                     //draw vertical line for lowerWhisker
@@ -189,7 +198,7 @@ Table.prototype.populateTable = function(parentDivId,data) {
                         .attr("x2", scale(d.value[0]))
                         .attr("stroke", "black")
                         .attr("y1", 5)
-                        .attr("y2", 25);
+                        .attr("y2", 15);
 
                     //draw vertical line for upperWhisker
                     svg.append("line")
@@ -198,7 +207,7 @@ Table.prototype.populateTable = function(parentDivId,data) {
                         .attr("x2", scale(d.value[4]))
                         .attr("stroke", "black")
                         .attr("y1", 5)
-                        .attr("y2", 25);
+                        .attr("y2", 15);
 
                     //draw horizontal line from lowerWhisker to upperWhisker
                     svg.append("line")
@@ -219,7 +228,7 @@ Table.prototype.populateTable = function(parentDivId,data) {
                         .attr("width", function () {
                             return scale(d.value[3]) - scale(d.value[1]);
                         })
-                        .attr("height", 20);
+                        .attr("height", 10);
 
                     //draw vertical line at median
                     svg.append("line")
@@ -228,7 +237,7 @@ Table.prototype.populateTable = function(parentDivId,data) {
                         .attr("x1", scale(d.value[2]))
                         .attr("x2", scale(d.value[2]))
                         .attr("y1", 5)
-                        .attr("y2", 25);
+                        .attr("y2", 15);
                 }
             }
             else {
@@ -240,9 +249,13 @@ Table.prototype.populateTable = function(parentDivId,data) {
         .transition()
         .duration(2000)
         .style("left", function (d, i) {
-            if (i == 1) return (self.cellWidth + 40) + "px"; // Test!
-            if (i == 2) return (2 * self.cellWidth + 20) + "px"; // Test!
-            return (i * self.cellWidth) + "px"
+            var thisLocation = cellLeft;
+            if(i==4)
+                cellLeft = 0;
+            else
+                cellLeft += parseInt(d3.select(this).style("width"),10) + 0.03 * self.tableDivsWidth; //(2 * padding)
+
+            return thisLocation + "px"
         });
 };
 
@@ -269,10 +282,14 @@ Table.prototype.populateMovie = function(parentDivId,data,level) {
         })
         .on("click", function (d) {
             // Interactivity
+            self.interactivity.updatedTable(d.data);
         })
         .style("top", function (d, i) {
             return (i * self.cellHeight) + "px"
         });
+
+    var cellLeft = 0;
+    var format = d3.format(",d");
 
     var cells = self.div.select(parentDivId)
         .selectAll(".summaryRow")
@@ -283,37 +300,90 @@ Table.prototype.populateMovie = function(parentDivId,data,level) {
         })
         .enter()
         .append("div")
-        //.attr("class", "tableCell")
-        .attr("class",function (d,i) { // Test!
-            if(i==0) return "tableCell2";
-            if(i==1) return "tableCell1";
-            if(i==2) return "tableCell3";
-            return "tableCell";
+        .attr("class",function (d,i) {
+            if(i==0) return "tableCell movieCell0";
+            return "tableCell tableCell" + (i+1);
         })
-        .html(function (d) {
+        .html(function (d,i) {
+            if (i == 2 || i == 3)
+                return format(d.value);
             return d.value
         })
         .transition()
         .duration(2000)
         .style("left", function (d, i) {
-            if (i==1) return 20 + "px"; // Test!
-            if (i==2) return (2*self.cellWidth + 20) + "px"; // Test!
-            return (i * self.cellWidth) + "px"
+            var thisLocation = cellLeft;
+            if(i==3)
+                cellLeft = 0;
+            else
+                cellLeft += parseInt(d3.select(this).style("width"),10) + 0.03 * self.tableDivsWidth; //(2 * padding)
+            return thisLocation + "px"
         });
 };
 
 Table.prototype.nestedData = function(data,id,level) {
 
     var self = this;
+
+    var formatGrossBudget = d3.format(".4s");
+
     var rawData = d3.nest()
         .key(function (d) {
-            var replaced = d[self.filters[level][0]].replace(/\s/g, 'unknown');
-            return replaced.replace(/\./g,'_');
+
+            if (d[self.sortOptions[level].Option] == " ")
+                return 'unknown';
+
+            switch (self.sortOptions[level].Option) {
+                case "alph" :
+                    var reg = /[^A-Za-z0-9 ]/;
+                    if (reg.test(d["movie_title"].charAt(0)))
+                        return "special";
+                    return d["movie_title"].charAt(0);
+                case "gross" :
+                    return Math.round(+d["gross"] / 1000000);// * 1000000;
+                case "budget" :
+                    return Math.round(+d["budget"] / 1000000);// * 1000000;
+                case "country" :
+                    return d["country"].replace(/\s/g, '_');
+                case "imdb_score" :
+                    return Math.round(+d["imdb_score"]);
+                default:
+                    return d[self.sortOptions[level].Option].replace(/\s/g, '_');
+            }
         })
         .rollup(function (leaves) {
-            var key = (leaves[0][self.filters[level][0]]) !== " " ? leaves[0][self.filters[level][0]] : "Unknown";
+
+            if (leaves[0][self.sortOptions[level].Option] == " ")
+                var key = 'unknown';
+            else {
+                switch (self.sortOptions[level].Option) {
+                    case "alph" :
+                        var reg = /[^A-Za-z0-9 ]/;
+                        if (reg.test(leaves[0]["movie_title"].charAt(0))) {
+                            key = "Special Characters";
+                            break;
+                        }
+                        key = leaves[0]["movie_title"].charAt(0);
+                        break;
+                    case "gross" :
+                        key = formatGrossBudget(Math.round(+leaves[0]["gross"] / 1000000) * 1000000);
+                        break;
+                    case "budget" :
+                        key = formatGrossBudget(Math.round(+leaves[0]["budget"] / 1000000) * 1000000);
+                        break;
+                    case "country" :
+                        key = leaves[0]["country"];
+                        break;
+                    case "imdb_score" :
+                        key = Math.round(+leaves[0]["imdb_score"]);
+                        break;
+                    default:
+                        key = leaves[0][self.sortOptions[level].Option];
+                }
+            }
+
             return {
-                "key": self.filters[level][1] + ": " + key,
+                "key": self.sortOptions[level].Text + ": " + key,
                 "numberOfMovies": leaves.length,
                 "averageRating": computeMean(leaves, 'imdb_score'),
                 "averageBudget": computeQuartiles(leaves, 'budget'),// give min,Q25,median,Q75,max
@@ -323,7 +393,30 @@ Table.prototype.nestedData = function(data,id,level) {
         .entries(data);
 
     rawData.sort(function (a,b) {
-        return d3.descending(a.key,b.key);
+        if (d3.select("#sortCheckbox").property("checked")) {
+            switch (self.sortOptions[level].Option) {
+                case "gross" :
+                    return d3.descending(+a.key, +b.key);
+                case "budget" :
+                    return d3.descending(+a.key, +b.key);
+                case "imdb_score" :
+                    return d3.descending(+a.key, +b.key);
+                default:
+                    return d3.descending(a.key, b.key);
+            }
+        }
+        else {
+            switch (self.sortOptions[level].Option) {
+                case "gross" :
+                    return d3.ascending(+a.key, +b.key);
+                case "budget" :
+                    return d3.ascending(+a.key, +b.key);
+                case "imdb_score" :
+                    return d3.ascending(+a.key, +b.key);
+                default:
+                    return d3.ascending(a.key, b.key);
+            }
+        }
     });
 
     var newData = [];
@@ -331,10 +424,32 @@ Table.prototype.nestedData = function(data,id,level) {
         newData.push({
             "level": level,
             "value": rawData[t].value,
-            "id": id + "___" + self.filters[level][0] + "__" + rawData[t].key
+            "id": id + "___" + self.sortOptions[level].Option + "__" + rawData[t].key
         });
     }
     return newData;
+};
+
+Table.prototype.movieData = function(data,level){
+
+    var self = this;
+
+    var movieInfo = [];
+    for (var j = 0; j < data.length; j++) {
+        movieInfo.push({
+            "level": level,
+            "value": {
+                "title": data[j]["movie_title"],
+                "rating": data[j]["imdb_score"],
+                "budget": data[j]["budget"],
+                "gross": data[j]["gross"]
+            },
+            "id": 0,
+            "data": data[j]
+        })
+    }
+
+    return movieInfo;
 };
 
 Table.prototype.expandRows = function(id,level) {
@@ -346,26 +461,33 @@ Table.prototype.expandRows = function(id,level) {
 
     for (var t = 1; t < filters.length; t++) {
         var filter = filters[t].split("__");
-        console.log(filter);
+
         subset = subset.filter(function (d) {
-            var replaced = (filter[0] == "imdb_score") ? filter[1].replace(/_/g, '.') : filter[1].replace('unknown', ' ');
-            return d[filter[0]] == replaced;
+            if (filter[1] == 'unknown')
+                return d[filter[0]] == " ";
+
+            switch (filter[0]) {
+                case "alph" :
+                    var reg = /[^A-Za-z0-9 ]/;
+                    if (reg.test(d["movie_title"].charAt(0)))
+                        return "special" == filter[1];
+                    return d["movie_title"].charAt(0) == filter[1];
+                case "gross" :
+                    return Math.round(+d["gross"] / 1000000) == filter[1];
+                case "budget" :
+                    return Math.round(+d["budget"] / 1000000) == filter[1];
+                case "country" :
+                    return d["country"].replace(/\s/g, '_') == filter[1];
+                case "imdb_score" :
+                    return Math.round(+d["imdb_score"]) == filter[1];
+                default:
+                    return d[filter[0]].replace(/\s/g, '_') == filter[1];
+            }
         });
     }
 
-    if (level == self.filters.length - 1 || subset.length == 1) {
-        var movieInfo = [{
-            "level": level + 1,
-            "value": {
-                "key": "",
-                "title": subset[0]["movie_title"],
-                "rating": subset[0]["imdb_score"],
-                "budget": subset[0]["budget"],
-                "gross": subset[0]["gross"]
-            },
-            "id": 0,
-            "data": subset[0]
-        }];
+    if (level == self.sortOptions.length - 1 || subset.length == 1) {
+        var movieInfo = self.movieData(subset,level+1);
         self.populateMovie("#container___" + id, movieInfo, level + 1);
     }
     else {
@@ -389,185 +511,219 @@ Table.prototype.shrinkRows = function(id) {
 Table.prototype.createSortOptions = function() {
     var self = this;
 
-    var prefixedFilterLocation = [5,115,225];
-    var locations = {
-        "minAllowedX": 0,
-        "maxAllowedX": 230,
-        "textX": 10,
-        "textY": 25,
-        "rectWidth": 100,
-        "rectHeight": 50,
-        "rectSpacing": 10
-    };
+    var sortDiv = self.div.append("div"); // div for sort options and button
 
+    sortDiv.append("div")
+        .style("padding", "12px")
+        .append("span")
+        .text("Drag grouping options to order, " +
+            "drag them to the left side to deactivate, " +
+            "drag them to right to activate. " +
+            "Steelblue options are active options");
 
-    var globalDiv = self.div.append("div"); // div for sort options and button
-
-    var sortOptions = globalDiv
+    var sortOptionsDiv = sortDiv
         .append("div")
-        .attr("class","leftColumn")
-        .attr("id","sort_options");
+        .attr("id", "sort_options");
 
-    var button = globalDiv
-        .append("div")
-        .attr("class","rightColumn")
+    var group = sortOptionsDiv
         .append("svg")
-        .attr("class","sortOptionSvg")
-        .append("g")
-        .on("click",function () {
-            // update self.filters!
-            self.updateFiltersOrder();
-        });
-    button
-        .append("rect")
-        .attr("x",0)
-        .attr("y",0)
-        .attr("class","button");
-    button
-        .append("text")
-        .attr("class","buttonText")
-        .attr("x",locations.textX)
-        .attr("y",locations.textY)
-        .text("Button");
-
-    var group = sortOptions
-        .append("svg")
-        .attr("class","sortOptionSvg")
+        .attr("class", "sortOptionSVG") // all filters are active
         .selectAll('g')
-        .data(self.filters)
+        .data(self.sortOptions)
         .enter().append("g")
+        .attr("class", "activeFilter")
         .attr("data-order", function (d, i) {
             return i;
         })
-        .attr("data-filter", function (d,i) {
-            return self.filters[i][0];
-        })
-        .attr("data-filterTitle", function (d,i) {
-            return self.filters[i][1];
-        })
         .call(d3.drag()
             .subject(this)
-                .on("start", self.dragstarted)
-                .on("drag", self.dragged)
-                .on("end", self.dragended)
+            .on("start", function () {
+                self.dragstarted(this)
+            })
+            .on("drag", function (d) {
+                self.dragged(this, d)
+            })
+            .on("end", function () {
+                self.dragended(this)
+            })
         );
 
     group.append("rect")
         .attr("y", 0)
         .attr("x", function (d, i) {
-            return prefixedFilterLocation[i];//110 * i + 5;
+            return i * (self.optionWidth + self.optionPadding);
         })
-        .attr("class", "sortOption");
+        .attr("rx",10)
+        .attr("class", "sortOptionRect")
+        .attr("width", self.optionWidth);
 
     group.append("text")
         .attr("x", function (d, i) {
-            return prefixedFilterLocation[i] + locations.textX;//110 * i + 10;
+            return i * (self.optionWidth + self.optionPadding) + self.optionLocation.textX;
         })
-        .attr("y", locations.textY)
-        .style("class", "textFilter")
+        .attr("y", self.optionLocation.textY)
+        .attr("class", "textFilter")
         .text(function (d) {
-            return d[1];
+            return d.Text;
         });
 
+    var buttonDiv = sortDiv
+        .append("div");
+
+    var checkBox = buttonDiv.append("input")
+        .attr("type","checkbox")
+        .attr("id","sortCheckbox")
+        .attr("checked",true);
+
+    buttonDiv.append("text")
+        .text("Descending");
+
+    var buttonSvg = buttonDiv
+        .append("svg")
+        .attr("class", "sortOptionSVG")
+        .append("g")
+        .on("click", function () {
+            // update self.filters!
+            self.updateFiltersOrder();
+        });
+
+    buttonSvg
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("rx",10)
+        .attr("class", "sortButton");
+
+    buttonSvg
+        .append("text")
+        .attr("class", "buttonText")
+        .attr("x", self.optionLocation.textX)
+        .attr("y", self.optionLocation.textY)
+        .text("Apply");
 };
 
-Table.prototype.dragstarted = function(d) {
-    d3.select(this)
-        .attr("z-index",3)
+Table.prototype.dragstarted = function(draggingElement) {
+    var self = this;
+
+    d3.select(draggingElement)
         .select("rect")
-        .classed("active", true);
+        .classed("moving", true);
 };
 
-Table.prototype.dragended = function(d) {
+Table.prototype.dragended = function(draggingElement) {
 
-    var prefixedFilterLocation = [5,115,225];
-    var locations = {
-        "minAllowedX": 0,
-        "maxAllowedX": 230,
-        "textX": 10,
-        "textY": 25,
-        "rectWidth": 100,
-        "rectHeight": 50,
-        "rectSpacing": 10
-    };
-
-    var movingFilter = d3.select(this)
-        .attr("z-index",null);
+    var self = this;
+    var movingFilter = d3.select(draggingElement);
 
     movingFilter.select("rect")
-        .classed("active", false);
-
-    movingFilter.select("rect")
+        .classed("moving", false)
         .transition()
         .duration(100)
         .attr("x", function () {
-            return prefixedFilterLocation[movingFilter.attr("data-order")];
+            if (movingFilter.classed("activeFilter"))
+                return Number(movingFilter.attr("data-order")) * (self.optionWidth + self.optionPadding);
+            else
+                return (Number(movingFilter.attr("data-order")) + 1) * (self.optionWidth + self.optionPadding);
         });
     movingFilter.select("text")
         .transition()
         .duration(100)
         .attr("x", function () {
-            return prefixedFilterLocation[movingFilter.attr("data-order")] + locations.textX;
+            if (movingFilter.classed("activeFilter"))
+                return Number(movingFilter.attr("data-order")) * (self.optionWidth + self.optionPadding) + self.optionLocation.textX;
+            else
+                return (Number(movingFilter.attr("data-order")) + 1) * (self.optionWidth + self.optionPadding) + self.optionLocation.textX;
         });
-
 };
 
-Table.prototype.dragged = function(d) {
+Table.prototype.dragged = function(draggingElement,d) {
+    var self = this;
 
-    var prefixedFilterLocation = [5, 115, 225];
-    var locations = {
-        "minAllowedX": 0,
-        "maxAllowedX": 230,
-        "textX": 10,
-        "textY": 25,
-        "rectWidth": 100,
-        "rectHeight": 50,
-        "rectSpacing": 10
-    };
+    var newX = Math.abs(Math.max(self.optionLocation.minAllowedX, Math.min(self.optionLocation.maxAllowedX, d3.event.x)));
+    var oldX = d3.select(draggingElement).attr("data-order")*(self.optionWidth + self.optionPadding);
+    if (d3.select(draggingElement).classed("activeFilter") == false)
+        oldX += (self.optionWidth + self.optionPadding);
 
-    d3.select(this).select("text")
-        .attr("x", d.x = Math.max(locations.minAllowedX, Math.min(locations.maxAllowedX, d3.event.x)) + locations.textX)
-        .attr("y", locations.textY);
-    d3.select(this).select("rect")
-        .attr("x", d.x = Math.max(locations.minAllowedX, Math.min(locations.maxAllowedX, d3.event.x)));
+    d3.select(draggingElement).select("text")
+        .attr("x", d.x = newX + self.optionLocation.textX);
+    d3.select(draggingElement).select("rect")
+        .attr("x", d.x = newX);
 
-    var oldDO = Number(d3.select(this).attr("data-order"));
-    var oldX = prefixedFilterLocation[oldDO];
-    var newX = Math.abs(Math.max(locations.minAllowedX, Math.min(locations.maxAllowedX, d3.event.x)));
-    var mustMove = Math.abs(newX - oldX) >= locations.rectWidth + locations.rectSpacing;
-    var movingDirection = Math.sign(newX - oldX);
+    if (Math.abs(newX - oldX) >= (self.optionWidth + self.optionPadding)) {
+        if (newX > oldX) {
+            var filters = self.div.select("#sort_options")
+                .selectAll('g')
+                .filter(function () {
+                    return d3.select(this).attr("data-order") > d3.select(draggingElement).attr("data-order")
+                        && Number(d3.select(this).attr("data-order")) * (self.optionWidth + self.optionPadding) <= newX
+                        && d3.select(this).classed("activeFilter");
+                });
 
-    if (mustMove) {
+            if (filters.size() != 0) {
+                // Update
+                filters.attr("data-order", function () {
+                    return Number(d3.select(this).attr("data-order")) - 1;
+                });
+                filters.select("rect")
+                    .transition()
+                    .duration(100)
+                    .attr("x", function () {
+                        return Number(d3.select(this).attr("x")) - (self.optionWidth + self.optionPadding);
+                    });
+                filters.select("text")
+                    .transition()
+                    .duration(100)
+                    .attr("x", function () {
+                        return Number(d3.select(this).attr("x")) - (self.optionWidth + self.optionPadding);
+                    });
 
-        var numbersToMove = Math.floor(Math.abs(newX - oldX) / (locations.rectWidth + locations.rectSpacing));
+                d3.select(draggingElement).attr("data-order", function () {
+                    return Number(d3.select(this).attr("data-order")) + filters.size();
+                });
+            }
+            else {
+                d3.select(draggingElement).classed("activeFilter", false);
+            }
+        }
+        else {
+            var numbersToMove = Math.floor(Math.abs(newX - oldX) / (self.optionWidth + self.optionPadding)); // possibly unnecessary always > 0
 
-        var filtersToMove = d3.select("#table_div").select("#sort_options")
-            .selectAll('g')
-            .filter(function () {
-                return Number(d3.select(this).attr("data-order")) != oldDO &&
-                    Number(d3.select(this).attr("data-order")) >= Math.min(oldDO, oldDO + movingDirection * numbersToMove) &&
-                    Number(d3.select(this).attr("data-order")) <= Math.max(oldDO, oldDO + movingDirection * numbersToMove);
-            });
+            if (numbersToMove > 0) {
+                // update
+                var toMove = self.div.select("#sort_options")
+                    .selectAll('g')
+                    .filter(function () {
+                        return d3.select(this).attr("data-order") < d3.select(draggingElement).attr("data-order") &&
+                            Number(d3.select(this).attr("data-order")) * (self.optionWidth + self.optionPadding) >= newX;
+                    })
+                    .attr("data-order", function () {
+                        return Number(d3.select(this).attr("data-order")) + 1;
+                    });
 
-        d3.select(this).attr("data-order", function () {
-            return Number(d3.select(this).attr("data-order")) + movingDirection * numbersToMove;
-        });
+                toMove.select("rect")
+                    .transition()
+                    .duration(100)
+                    .attr("x", function () {
+                        return Number(d3.select(this).attr("x")) + (self.optionWidth + self.optionPadding);
+                    });
+                toMove.select("text")
+                    .transition()
+                    .duration(100)
+                    .attr("x", function () {
+                        return Number(d3.select(this).attr("x")) + (self.optionWidth + self.optionPadding);
+                    });
 
-        filtersToMove.attr("data-order", function () {
-            return Number(d3.select(this).attr("data-order")) - movingDirection;
-        })
-            .select("rect")
-            .transition()
-            .duration(100)
-            .attr("x", function () {
-                return d3.select(this).attr("x") - movingDirection * (locations.rectWidth + locations.rectSpacing);
-            });
-        filtersToMove.select("text")
-            .transition()
-            .duration(100)
-            .attr("x", function () {
-                return d3.select(this).attr("x") - movingDirection * (locations.rectWidth + locations.rectSpacing);
-            });
+                d3.select(draggingElement)
+
+                    .classed("activeFilter", function () {
+                        return toMove.size() < numbersToMove;
+                    })
+                    .attr("data-order", function () {
+                        return Number(d3.select(this).attr("data-order")) - toMove.size();
+                    });
+            }
+
+        }
     }
 };
 
@@ -575,51 +731,135 @@ Table.prototype.updateFiltersOrder = function() {
     var self = this;
 
     var newOrder = [];
-    var filters = d3.select("#table_div").select("#sort_options")
+    var filters = self.div.select("#sort_options")
         .selectAll('g')
-        .each(function () {
+        .filter(function () {
+            return d3.select(this).classed("activeFilter");
+        })
+        .each(function (d) {
             newOrder.push({
-                "filter": d3.select(this).attr("data-filter"),
-                "title": d3.select(this).attr("data-filterTitle"),
-                "order": d3.select(this).attr("data-order")
+                "Option": d.Option,
+                "Text": d.Text,
+                "Order": d3.select(this).attr("data-order")
             });
         });
 
     newOrder.sort(function (a, b) {
-        return d3.ascending(a["order"], b["order"]);
+        return d3.ascending(a["Order"], b["Order"]);
     });
 
-    var newFilter = [];
-    for (var i in newOrder)
-        newFilter.push([newOrder[i]["filter"],newOrder[i]["title"]]);
-
-    self.filters = newFilter;
-    self.div.select("#tableBody").selectAll("div").remove();
-    self.populateTable("#tableBody", self.nestedData(self.movies, "id", 0));
+    if (newOrder.length == 0) {
+        var newMovieList = self.movieData(self.movies, 0);
+        if (newMovieList.length > 200) {
+            alert("Too many movies to populate");
+            return;
+        }
+        self.sortOptions = newOrder;
+        self.div.select("#tableBody").selectAll("div").remove();
+        self.populateMovie("#tableBody", newMovieList, 0);
+    }
+    else {
+        self.sortOptions = newOrder;
+        self.div.select("#tableBody").selectAll("div").remove();
+        self.populateTable("#tableBody", self.nestedData(self.movies, "id", 0));
+    }
 };
 
 Table.prototype.update = function(newMovies) {
+
     var self = this;
+
+    self.movies = newMovies;
+
+    if (newMovies.length <= 50) {
+        var allFilters = self.div.select("#sort_options")
+            .selectAll('g')
+            .classed("activeFilter",false);
+    }
+    else {
+        var inactiveOrder = self.sortOptions.length - 1;
+
+        var filters = self.div.select("#sort_options")
+            .selectAll('g')
+            .classed("activeFilter", true);
+
+        filters = self.div.select("#sort_options")
+            .selectAll('g')
+            .each(function (d) {
+
+                var thisElement = d3.select(this);
+                //var order = thisElement.attr("data-order");
+                var option = d.Option;
+
+                if (option == 'title_year' || option == 'imdb_score' || option == 'country') {
+
+                    if (self.interactivity.filters[option].length > 0) { // used filter
+
+                        var swapElements = self.div.select("#sort_options")
+                            .selectAll('g').filter(function () {
+                                return d3.select(this).attr("data-order") != thisElement.attr("data-order")
+                                    && d3.select(this).classed("activeFilter");
+                            })
+                            .attr("data-order", function (d, i) {
+                                return d3.select(this).attr("data-order") - 1;
+                            });
+
+                        thisElement
+                            .attr("data-order", inactiveOrder)
+                            .classed("activeFilter", false);
+
+                        inactiveOrder -= 1;
+                    }
+                }
+            });
+    }
+
+    filters.each(function () {
+        var thisElement = d3.select(this);
+
+        thisElement.select("rect")
+            .transition()
+            .duration(2000)
+            .attr("x", function () {
+                if (thisElement.classed("activeFilter"))
+                    return Number(thisElement.attr("data-order")) * (self.optionWidth + self.optionPadding);
+                else
+                    return (Number(thisElement.attr("data-order")) + 1) * (self.optionWidth + self.optionPadding);
+            });
+        thisElement.select("text")
+            .transition()
+            .duration(2000)
+            .attr("x", function () {
+                if (thisElement.classed("activeFilter"))
+                    return Number(thisElement.attr("data-order")) * (self.optionWidth + self.optionPadding) + self.optionLocation.textX;
+                else
+                    return (Number(thisElement.attr("data-order")) + 1) * (self.optionWidth + self.optionPadding) + self.optionLocation.textX;
+            });
+    });
+
+    // Update table
+    self.updateFiltersOrder();
 
 };
 
 Table.prototype.computeXscales = function (movies) {
     var self = this;
 
-    self.xScaleBudget.domain([d3.min(movies
-        .filter(function (d) {
-            if (d['budget'] !== " ")
-                return typeof d['budget'];
-        })
-        .map(function (d) {
-            return +d['budget'];
-        }))
-        ,
-        d3.max(self.movies
-            .map(function (d) {
+    self.xScaleBudget
+        .domain([d3.min(movies
+            .filter(function (d) {
                 if (d['budget'] !== " ")
-                    return +d["budget"];
-            }))]);
+                    return typeof d['budget'];
+            })
+            .map(function (d) {
+                return +d['budget'];
+            }))
+            ,
+            d3.max(self.movies
+                .map(function (d) {
+                    if (d['budget'] !== " ")
+                        return +d["budget"];
+                }))]);
 
     self.xScaleGross.domain([d3.min(movies
         .filter(function (d) {
@@ -668,12 +908,14 @@ function computeQuartiles(leaves,attr) {
 }
 
 function computeMean(leaves,attr) {
+
+    var format = d3.format(",d");
+
     if (attr == "imdb_score") {
         return Math.round(d3.mean(leaves, function (g) {
                 return g[attr] * 10
             })) / 10;
     }
-    var format = d3.format(",d");
     return format(Math.round(d3.mean(leaves, function (g) {
         return g[attr]
     })));
