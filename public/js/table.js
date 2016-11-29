@@ -49,7 +49,7 @@ Table.prototype.init = function() {
 
     self.createSortOptions();
 
-    self.header = ["number Of Movies", "Rating", "Budget", "Gross"];
+    self.header = ["number Of Movies", "Average Rating (out of 5)", "Budget", "Gross"];
 
     self.computeXscales(self.movies);
 
@@ -151,11 +151,11 @@ Table.prototype.populateTable = function(parentDivId,data) {
                     .attr('id', 'stars')
                     .attr('patternUnits', 'userSpaceOnUse')
                     .attr('width', 100)
-                    .attr('height', 35)
+                    .attr('height', 39)
                     .append("image")
-                    .attr("xlink:href", "data/stars2.png")
+                    .attr("xlink:href", "data/fiveStars.png")
                     .attr('width', 100)
-                    .attr('height', 35);
+                    .attr('height', 39);
                 svg
                     .append("rect")
                     .attr("x", 0)
@@ -163,19 +163,9 @@ Table.prototype.populateTable = function(parentDivId,data) {
                     .attr("width", function () {
                         return Math.min(100, d.value * 10);
                     })
-                    .attr("height", 35)
+                    .attr("height", 39)
                     .attr("fill", "url(#stars)");
-                /*
-                svg
-                    .append("rect")
-                    .attr("x", 0)
-                    .attr("y", 17)
-                    .attr("width", function () {
-                        return Math.min(100, Math.max(0, (d.value - 5) * 20));
-                    })
-                    .attr("height", 17)
-                    .attr("fill", "url(#stars)");
-                    */
+
             }
             else if (i == 3 || i == 4) { // Box Plot for Budget or Gross
 
@@ -449,6 +439,13 @@ Table.prototype.movieData = function(data,level){
         })
     }
 
+    movieInfo.sort(function (a,b) {
+        if (d3.select("#sortCheckbox").property("checked"))
+            return d3.descending(a.value.title, b.value.title);
+        else
+            return d3.ascending(a.value.title, b.value.title);
+    });
+
     return movieInfo;
 };
 
@@ -486,7 +483,7 @@ Table.prototype.expandRows = function(id,level) {
         });
     }
 
-    if (level == self.sortOptions.length - 1 || subset.length == 1) {
+    if (level == self.sortOptions.length - 1 || subset.length <= 30) {
         var movieInfo = self.movieData(subset,level+1);
         self.populateMovie("#container___" + id, movieInfo, level + 1);
     }

@@ -45,8 +45,7 @@
 }
 
 .headerCell1 {
-    width: 10%;
-    padding-left: 6%;
+    width: 14%;
 }
 
 .headerCell2 {
@@ -177,6 +176,11 @@
     text-anchor:start;
 }
 
+#starSvg {
+    width: 100px;
+    height:40px;
+}
+
 /* Information div styles */
 
 #information_div {
@@ -184,17 +188,75 @@
     position: relative;
 }
 
-/* Stars */
-#starSvg {
-    width: 100px;
-    height:40px;
+.infoContainerDiv {
+    width: 60%;
+    float: left;
+}
+
+.infoDiv {
+    width: 100%;
+    clear: left;;
+}
+
+.titleDiv {
+    padding: 10px 10px 20px 4px;
+}
+
+#titleInfo {
+    font-size: 2em;
+    font-style: italic;
+}
+
+.ratingInfoDiv .title {
+}
+
+.statueDiv {
+    padding: 5px;
+}
+
+text#awardsInfo {
+    display: inline-block;
+    vertical-align: top;
+}
+
+span#academyInfo {
+    padding-left: 100px;
+}
+
+.title {
+    float: left;
+    width: 20%;
+    text-align: right;
+    padding: 0 20px 2px;
+}
+
+.title text {
+    font-size: 1.2em;
+    font-style: italic;
+}
+
+.info {
+    float: left;
+    width: 70%;
+}
+
+.info text {
+    font-size: 1.1em;
+}
+
+.posterDiv {
+    float: left;
+}
+
+#ratingStarSvg {
+    width: 200px;
+    height: 40px;
 }
 
 /* Graph Styles */
 
 #graph_div {
     height: 150px;
-
 }
 
 .content {
@@ -206,6 +268,7 @@
     fill : none;
     stroke:#000;
     stroke-width:0.2px;
+
 }
 
 .nodes {
@@ -302,4 +365,5 @@
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
+
 }
