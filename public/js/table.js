@@ -165,7 +165,6 @@ Table.prototype.populateTable = function(parentDivId,data) {
                     })
                     .attr("height", 39)
                     .attr("fill", "url(#stars)");
-
             }
             else if (i == 3 || i == 4) { // Box Plot for Budget or Gross
 

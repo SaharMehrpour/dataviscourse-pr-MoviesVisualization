@@ -272,19 +272,6 @@ Information.prototype.update = function(selectedMovie) {
         .attr("y", 0)
         .attr("height", 39)
         .attr("fill", "url(#infoStars)")
-
-        .on("mouseover", function (d) { // Test
-            self.div.select("#tooltipBox")
-                .style("display", "inline")
-                .text(d)
-                .attr("left", d3.event.x + "px")
-                .attr("top", d3.event.y + "px");
-        })
-        .on("mouseout", function () {
-            self.div.select("#tooltipBox")
-                .style("display", "none");
-        })
-
         .transition()
         .duration(1000)
         .attr("width", function (d) {
