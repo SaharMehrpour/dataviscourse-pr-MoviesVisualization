@@ -203,8 +203,6 @@ Graph.prototype.removeGenreNodes = function(d) {
 
     var self = this;
 
-    // self.removeFixedNode(i);
-
     self.linkData = self.linkData.filter (function(obj) {
 
         return obj.target.type != "g";
@@ -213,10 +211,6 @@ Graph.prototype.removeGenreNodes = function(d) {
     self.nodeData = self.nodeData.filter (function(obj) {
         return obj.type != "g";
     });
-
-
-
-//    self.simulation.stop();
 
     self.refresh();
 
@@ -254,10 +248,6 @@ Graph.prototype.refresh = function () {
     self.nodeData[index].fx = self.svgWidth/2;
     self.nodeData[index].fy = self.svgHeight/2;
 
-    var radius = 7.5;
-
-    var distanceFactor = 75;
-
     // NOTE: Take care of duplicates in data
     // console.log(self.nodeData.filter(function(d){
     //
@@ -272,7 +262,7 @@ Graph.prototype.refresh = function () {
 
     linkGroups.exit().remove();
 
-    var linkGroupEnter = linkGroups.enter().append("g")
+    var linkGroupEnter = linkGroups.enter().insert("g",":first-child")
         .attr("class","links");
 
     linkGroupEnter.append("path");
@@ -388,7 +378,6 @@ Graph.prototype.refresh = function () {
             else
                 return 'images/actor.png'
         })
-        //.attr('class', 'pico')
         .attr('height', function (d) {
             if (d.id === selectedMovie.movie_title)
                 return imageHeight * 1.5;
@@ -564,6 +553,32 @@ Graph.prototype.fade = function (d,opacity) {
     })
 }
 
+function measureText(pText, pFontSize, pStyle) {
+    var lDiv = document.createElement('lDiv');
+
+    document.body.appendChild(lDiv);
+
+    if (pStyle != null) {
+        lDiv.style = pStyle;
+    }
+    lDiv.style.fontSize = "" + pFontSize + "px";
+    lDiv.style.position = "absolute";
+    lDiv.style.left = -1000;
+    lDiv.style.top = -1000;
+
+    lDiv.innerHTML = pText;
+
+    var lResult = {
+        width: lDiv.clientWidth,
+        height: lDiv.clientHeight
+    };
+
+    document.body.removeChild(lDiv);
+    lDiv = null;
+
+    return lResult;
+}
+
 /*
  Build the graph
  */
@@ -605,4 +620,6 @@ Graph.prototype.update = function(selectedMovie) {
 
     self.refresh();
 };
+
+
 
