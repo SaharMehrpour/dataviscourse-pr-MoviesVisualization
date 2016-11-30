@@ -311,6 +311,77 @@ span#academyInfo {
     height: 100px;
 }
 
+/*genrerate*/
+.svgratinggenre{
+
+    /* background-color: #f0c3e7;*/
+}
+
+.axistext{
+
+    font-size: 15px;
+    font-weight: bold;
+    font-family: Times New Roman;
+}
+
+.xlabel{
+
+    font-family: Times New Roman;
+    text-anchor: middle;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: Times New Roman;
+}
+.grid line {
+    stroke: #ea12f0;
+    stroke-opacity: 1;
+    stroke-dasharray: 3;
+}
+
+.grid path {
+    stroke-width: 0;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 60px;
+    height: 28px;
+    padding: 8px;
+    font: 14px sans-serif;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.8);
+    border: 0px;
+    border-radius: 2px;
+    pointer-events: none;
+    color: #fff;
+    line-height: 1;
+    margin-top: 0px;
+
+
+}
+
+div.tooltip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.8);
+    content: "\25BC";
+    position: absolute;
+    top: 20px;
+    right: 41px;
+    text-align: center;
+    transform: rotate(90deg);
+}
+
+div.tooltip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 100%;
+}
+
 
 /*SIDEBAR STYLES*/
 
