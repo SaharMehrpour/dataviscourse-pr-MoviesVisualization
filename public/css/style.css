@@ -24,6 +24,49 @@
     margin: 0 auto;
 }
 
+.header{
+    border-top: solid 2px lightgray;
+    border-bottom: solid 2px lightgray;
+    width: 100%;
+    height: 55px;
+    overflow: hidden;
+}
+
+.headerCell {
+    /*position: absolute;*/
+    /*border: 2px black solid;*/
+    padding: 0 1.5%;
+    float: left;
+}
+
+.headerCell0 {
+    padding-left: 20.5%;
+    width: 12%;
+}
+
+.headerCell1 {
+    width: 14%;
+}
+
+.headerCell2 {
+    width: 20%;
+    padding-left: 1%;
+    text-align: center;
+}
+
+.headerCell3 {
+    width: 20%;
+    padding-left: 1%;
+    text-align: center;
+}
+
+.tableRow {
+    width: 100%;
+    border-top: 2px black solid;
+    height: 35px;
+    overflow: hidden;
+}
+
 .level0{
     background-color: linen;
 }
@@ -40,44 +83,38 @@
     background-color: palegoldenrod;
 }
 
-.header{
-    border-top: solid 2px lightgray;
-    border-bottom: solid 2px lightgray;
-    width: 100%;
-    border-top: 2px black solid;
-    height: 55px;
-    overflow: hidden;
-}
-
-.tableRow {
-    width: 100%;
-    border-top: 2px black solid;
-    height: 35px;
-    overflow: hidden;
-}
-
 .tableCell{
     position: absolute;
-    width: 60px;
-    padding: 0 5px;
+    float: left;
+    padding: 0 1.5%;
+    /*border: 2px solid black;*/
 }
 
-.tableCell1 { /* Test */
-    position: absolute;
-    width: 150px;
-    padding: 0 5px;
+.tableCell0{
+    width: 23%;
 }
 
-.tableCell2 { /* Test */
-    position: absolute;
-    width: 90px;
-    padding: 0 5px;
+.tableCell1 {
+    width: 5.3%;
 }
 
-.tableCell3 { /* Test */
-    position: absolute;
-    width: 60px;
-    padding: 0 5px;
+.tableCell2 {
+    width: 15%;
+}
+
+.tableCell3 {
+    width: 20%;
+    text-align: center;
+}
+
+.tableCell4 {
+    width: 20%;
+    text-align: center;
+}
+
+.movieCell0 {
+    width: 32%;
+    padding-left: 1%;
 }
 
 .tableBody {
@@ -88,34 +125,39 @@
     overflow-y: auto;
 }
 
-.expand {
-    /*background-color: floralwhite;*/
-}
-
 .movieRow {
     font-weight: bold;
 }
 
-.box {
+.box { /* For box plot */
     padding-left: 2px;
 }
 
-.sortOptionSvg {
+.sortOptionSVG {
     height: 50px;
-    width: 330px; /* 3 * (filters + padding) */
+    width: 100%;
 }
 
-.sortOption {
+.sortOptionGroup {
+    float: left;
+}
+
+.sortOptionRect {
     height: 40px;
-    width: 100px;
-    fill: blanchedalmond;
+    fill: khaki;
+    opacity: 0.5;
+}
+
+.activeFilter > rect {
+    fill: steelblue;
 }
 
 .textFilter {
     text-anchor:start;
+    font-size: 90%;
 }
 
-.active {
+.moving {
     fill: lightblue;
 }
 
@@ -124,7 +166,7 @@
     padding: 10px;
 }
 
-.button {
+.sortButton {
     height: 40px;
     width: 70px;
     fill: linen;
@@ -134,6 +176,11 @@
     text-anchor:start;
 }
 
+#starSvg {
+    width: 100px;
+    height:40px;
+}
+
 /* Information div styles */
 
 #information_div {
@@ -141,17 +188,75 @@
     position: relative;
 }
 
-/* Stars */
-#starSvg {
-    width: 100px;
-    height:40px;
+.infoContainerDiv {
+    width: 60%;
+    float: left;
+}
+
+.infoDiv {
+    width: 100%;
+    clear: left;;
+}
+
+.titleDiv {
+    padding: 10px 10px 20px 4px;
+}
+
+#titleInfo {
+    font-size: 2em;
+    font-style: italic;
+}
+
+.ratingInfoDiv .title {
+}
+
+.statueDiv {
+    padding: 5px;
+}
+
+text#awardsInfo {
+    display: inline-block;
+    vertical-align: top;
+}
+
+span#academyInfo {
+    padding-left: 100px;
+}
+
+.title {
+    float: left;
+    width: 20%;
+    text-align: right;
+    padding: 0 20px 2px;
+}
+
+.title text {
+    font-size: 1.2em;
+    font-style: italic;
+}
+
+.info {
+    float: left;
+    width: 70%;
+}
+
+.info text {
+    font-size: 1.1em;
+}
+
+.posterDiv {
+    float: left;
+}
+
+#ratingStarSvg {
+    width: 200px;
+    height: 40px;
 }
 
 /* Graph Styles */
 
 #graph_div {
     height: 150px;
-
 }
 
 .content {
@@ -163,6 +268,7 @@
     fill : none;
     stroke:#000;
     stroke-width:0.2px;
+
 }
 
 .nodes {
@@ -190,7 +296,7 @@
 
 
 #map_filter_div {
-    height: 900px;
+    height: 500px;
 }
 
 /* rating-genre styles */
@@ -203,6 +309,77 @@
 
 #year_filter_div {
     height: 100px;
+}
+
+/*genrerate*/
+.svgratinggenre{
+
+    /* background-color: #f0c3e7;*/
+}
+
+.axistext{
+
+    font-size: 15px;
+    font-weight: bold;
+    font-family: Times New Roman;
+}
+
+.xlabel{
+
+    font-family: Times New Roman;
+    text-anchor: middle;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: Times New Roman;
+}
+.grid line {
+    stroke: #ea12f0;
+    stroke-opacity: 1;
+    stroke-dasharray: 3;
+}
+
+.grid path {
+    stroke-width: 0;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 60px;
+    height: 28px;
+    padding: 8px;
+    font: 14px sans-serif;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.8);
+    border: 0px;
+    border-radius: 2px;
+    pointer-events: none;
+    color: #fff;
+    line-height: 1;
+    margin-top: 0px;
+
+
+}
+
+div.tooltip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.8);
+    content: "\25BC";
+    position: absolute;
+    top: 20px;
+    right: 41px;
+    text-align: center;
+    transform: rotate(90deg);
+}
+
+div.tooltip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 100%;
 }
 
 
@@ -259,4 +436,5 @@
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
+
 }

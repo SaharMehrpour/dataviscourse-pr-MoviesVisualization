@@ -8,7 +8,7 @@ function Interactivity() {
 };
 
 
-Interactivity.prototype.init = function(yearFilter, ratingGenreFilter, mapFilter, table, information, graph, movies){
+Interactivity.prototype.init = function(yearFilter, ratingGenreFilter, mapFilter, table, information, graph, movies) {
 
     var self = this;
 
@@ -19,7 +19,7 @@ Interactivity.prototype.init = function(yearFilter, ratingGenreFilter, mapFilter
     self.information = information;
     self.graph = graph;
     self.movies = movies;
-    self.filters = {'years':[], 'genres':[], 'ratings':[], 'countries':[]};
+    self.filters = {'title_year': [], 'imdb_score': [], 'country': [], 'genres': []};
 
 };
 
@@ -64,4 +64,8 @@ Interactivity.prototype.updatedTable = function(selectedMovie) {
     var self = this;
 
     // update the rest of the visualization
+
+    self.information.update(selectedMovie);
+
 };
+
