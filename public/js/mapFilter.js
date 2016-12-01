@@ -10,7 +10,7 @@ function MapFilter(movies, interactivity) {
     self.interactivity = interactivity;
     self.movies = movies;
 
-    self.div = d3.select("#map_filter_div");
+    self.div = d3.select("#map_filter_div").append('div').style('padding','25px');
 
     self.init();
 };
@@ -24,10 +24,7 @@ MapFilter.prototype.init = function(){
 	
 	//console.log(self.svg)
 	
-	self.div.append('input').attr('width',100).attr('height',100).attr('fill','blue').attr('type','submit').on ('click', function () {
-	
-		return search(d3.select(this.parentNode).select("#myVal").property("value"));
-	})
+
 	self.div.append('input').attr('width',100).attr('height',100).attr("type","text").attr("id","myVal").on('keyup',function () { 
 
 		if (d3.event.keyCode == 13)
@@ -38,26 +35,23 @@ MapFilter.prototype.init = function(){
 			
 	
 	});
+		self.div.append('input').attr('width',100).attr('height',100).attr('fill','blue').attr('type','submit').on ('click', function () {
 	
-    self.svg = self.div.append("svg").attr('height',400).attr('width',1000).attr('id','map');//.call(d3.zoom().on("zoom", function () {
+		return search(d3.select(this.parentNode).select("#myVal").property("value"));
+	})
+	
+    self.svg = self.div.append("svg").attr('padding','10').attr('height',400).attr('width',1000).attr('id','map');//.call(d3.zoom().on("zoom", function () {
     //self.svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
  // })).append('g')
-
+	//self.svg=self.div.append("svg").
 	self.svg.append('g');
-	
+
 	function search(text) {
 	self.drawMap(movies,country,text)
 	//console.log(text);
 	}
 	
-	
-	function handleClick(){
-		console.log("here")
-		//console.log(document.getElementById("myVal").value)
-		//draw(document.getElementById("myVal").value)
-		return false;
-	}
-            
+	       
 	var text1='none'
     
 
@@ -84,6 +78,7 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
 	var nested_data= d3.nest().key(function(d){//console.log('yes')
 	return d.country}).entries(movieList)
 
+
 	var countryList=d3.nest().key(function(d){//console.log(d.code)
 	return [d.name,d.code]}).entries(country)
 
@@ -94,7 +89,7 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
   	regex = new RegExp('^' + text + '$', 'i')
   	//console.log(text)
 
-	cList=[];
+	//cList=[];
 	//.attr("width","800").attr("height","700")
 		var path = d3.geoPath().projection(projection)
 	var count=0
@@ -119,10 +114,10 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
             return [0,0];
         })
         .html(function(d) {
-        	 console.log(d)
+        	 console.log("yes")
            //  populate data in the following format
               tooltip_data = {
-              "state": d.id
+              "state": 'yes'
               }
              // pass this as an argument to the tooltip_render function then,
              // return the HTML content returned from that method.
@@ -130,7 +125,13 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
             return tooltip_render(tooltip_data);
         });
     
-		self.svg.call(tip);
+		self.svg.select('g').call(tip);
+
+// var tip = d3.tip()
+//       .attr("class", "d3-tip")
+//       .offset([-8, 0])
+//       .html(function(d) { console.log(d.id);return "Radius: " + d.id; });
+//     self.svg.select('g').call(tip);
     
         var map=self.svg.select('g').selectAll("path")
             .data(topojson.feature(json, json.objects.countries).features)
@@ -145,15 +146,15 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
             .attr('transform','translate(20,60)')
             .attr("fill", "whitesmoke")
             .attr("opacity",0.75)
-            
+            //#000099
             .on("mouseover",function(d){
-            	d3.select(this).attr('stroke','#000099').attr('stroke-width',0.6);
+            	d3.select(this).attr('stroke','black').attr('stroke-width',0.6);
             	
-            	return tip.show;
+            	tip.show;
             })       
             .on("mouseout",function(){d3.select(this).attr('stroke','white').attr('stroke-width',0.5);tip.hide})
-			.on("click", function(d){d3.select(this).attr('stroke','white').attr('stroke-width',0.5);
-			mList=[];//x= IList.includes('"'+d.id+'"'); 
+			.on("click", function(d){d3.selectAll(this).attr('stroke','white').attr('stroke-width',0.5);
+			cList=[];//x= IList.includes('"'+d.id+'"'); 
 			
 			if ((IList.includes(d.id))==true){
 				var ind=IList.indexOf(d.id);console.log(ind);IList.splice(ind,1);d3.select(this).style('fill',function(d){ 
@@ -171,7 +172,7 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
 			if (d.id==c[1]){IList.push(d.id);
 			}}}
 
-			listed(IList,mList)
+			listed(IList,cList)
 
 //call the year filter and genre and rating and table
 
@@ -198,21 +199,15 @@ if (d.id==c[1]){console.log('yes');return colorScale(nested_data[j].values.lengt
 	if (nested_data[i].key==c[0]){d3.select('#'+c[1]).attr('fill',colorScale(nested_data[i].values.length))}}}
 
 	//map.on("click",function(d){console.log(d);d3.select(this).classed('mapover',true)})  
-	var zoom = d3.zoom()
-		.translateExtent([150, 450])
-		.scaleExtent([1, 100])
-		.on("zoom", zoomed);
-	
-	self.svg.select('g')
-// 		.call(zoom.translateBy, 150,450)
-// 		.call(zoom.scaleBy, 200)
-		.call(zoom);
-	function listed(IList,mList){
+
+	function listed(IList,cList){
 
         for (var i=0; i<IList.length; i++){for (var j=0; j<countryList.length; j++){
 			c=countryList[j].key.split(',')
-			if (IList[i]==c[1]){for (var k=0;k<movieList.length;k++){if (movieList[k].country==c[0]){mList.push(movieList[k])}}}}}
-	console.log(mList)
+			if (IList[i]==c[1]){cList.push(c[0])}}}
+	//console.log(cList)
+	self.interactivity.updatedMapFilter(cList)
+	
    	}
 	
 	  	for (var i=0; i<countryList.length; i++){
@@ -227,7 +222,17 @@ if (d.id==c[1]){console.log('yes');return colorScale(nested_data[j].values.lengt
        // mList=[]
         //listed(IList,mList)
    		 }
+   		 else {d3.select('#'+c[1]).attr('stroke','white').attr('stroke-width',0.5)}
 		}
+		var zoom = d3.zoom()
+		.translateExtent([150, 450])
+		.scaleExtent([1, 100])
+		.on("zoom", zoomed);
+	
+	self.svg.select('g')
+// 		.call(zoom.translateBy, 150,450)
+// 		.call(zoom.scaleBy, 200)
+		.call(zoom);
 	function zoomed() {
 
 //	console.log("here");	
@@ -240,52 +245,79 @@ if (d.id==c[1]){console.log('yes');return colorScale(nested_data[j].values.lengt
 	self.svg.select('g')
 	.attr("transform", "translate(" + d3.event.transform.x + "," + d3.event.transform.y + ") scale(" + d3.event.transform.k + ")");
 
-// 	  g.selectAll("path")
+self.svg.call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+
+function dragstarted(d) {
+  d3.event.sourceEvent.stopPropagation();
+  d3.select(this).classed("dragging", true);
+}
+
+function dragged(d) {
+  d3.select(this).attr("x", d.x = d3.event.x).attr("y", d.y = d3.event.y);
+}
+
+function dragended(d) {
+  d3.select(this).classed("dragging", false);
+}
+// var drag=d3.drag()
+// 	.origin(function(d) { return d; })
+//     .on("dragstart", dragstarted)
+//     .on("drag", dragged)
+//     .on("dragend", dragended);
+// // 	  g.selectAll("path")
+// self.svg.select('g').call(drag)
+// function dragstarted(d) {
+//   d3.event.sourceEvent.stopPropagation();
+//   d3.select(this).classed("dragging", true);
+// }
+// 
+// function dragged(d) {
+//   d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
+// }
+// 
+// function dragended(d) {
+//   d3.select(this).classed("dragging", false);
+// }
 // 		  .attr("d", path);
 	}
 
 })
+var quantize = d3.scaleQuantize()
+  .domain([ 0, d3.max(nested_data, function (d){
+//			console.log(d.values["length"]);
+            return d.values["length"]
+            }) ])
+  .range(['whitesmoke','#ccebff','#99d6ff','#4db8ff','#0099ff','#3385ff','#005ce6']);
 
+var svg = d3.select("#map");
+
+svg.append("g")
+  .attr("class", "legendQuant")
+  .attr("transform", "translate(0,270)");
+
+var legend = d3.legendColor()
+.labels(["0-20", "20-50", "50-120", "120-150","150-500","500-1000", ">1000"])
+  //.labelFormat(d3.format("%"))
+  //.useClass(true)
+  .scale(quantize)
+
+ // .orient('horizontal');
+
+svg.select(".legendQuant")
+  .call(legend);
 
 };
 
 
-MapFilter.prototype.updateMap = function(movieList,country){
+MapFilter.prototype.updateMap = function(movieList){
 var self=this
 
-/*var colorScale = d3.scaleQuantile()
-			//.domain([20,1500]).range(['#ccebff','#0000b3'])
-        .domain([10,20,50,120,130,1000])
-        .range(['#ccebff','#99d6ff','#4db8ff','#0099ff','#3385ff','#005ce6'])
+d3.csv("data/countrycode.csv", function(error,data){country=data;
 
-var nested_data= d3.nest().key(function(d){//console.log('yes')
-return d.country}).entries(movieList)
-
-var countryList=d3.nest().key(function(d){//console.log(d.code)
-return [d.name,d.code]}).entries(country)
-
-//console.log(nested_data[4].values.length)
-//var hashMap={}
-//forEach
-list=[]
-for (var i = 0; i < nested_data.length; i++) {
-//console.log(nested_data[i].key)
-for (var j=0; j<countryList.length; j++){
-c=countryList[j].key.split(',')
-//console.log(c[0])
-if (nested_data[i].key==c[0]){d3.select('#'+c[1]).attr('fill',colorScale(nested_data[i].values.length))}
-
-}
-
-}
-  
-  //console.log(list)
-    /*list.forEach(function(d){
-		//console.log(d)
-        d3.select('#map_filter_div').selectAll('#'+ d)
-            .attr('fill','steelblue');
-
-    })*/
+self.drawMap(movieList,country,'none')})
 
 
 
