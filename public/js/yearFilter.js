@@ -28,7 +28,7 @@ YearFilter.prototype.init = function() {
     self.div=self.div.append("div").attr("class","yearFilterContainer");
     self.svgBounds = self.div.node().getBoundingClientRect();
     self.svgWidth = self.svgBounds.width - self.margin.left - self.margin.right;
-    self.svgHeight = 200;
+    self.svgHeight = 150;
     self.svg = self.div.append("svg")
         .attr("width", self.svgWidth)
         .attr("height", self.svgHeight)
@@ -57,7 +57,7 @@ YearFilter.prototype.init = function() {
         return years[0]+" - "+years[1];
         })
         .attr("x", self.svgWidth / 2 - 40)
-        .attr("y", self.svgHeight / 2 - 70)
+        .attr("y", self.svgHeight / 2 - 60)
 
     ;
 
@@ -67,7 +67,7 @@ YearFilter.prototype.init = function() {
 
       var extent = brush.extent();
 
-
+        //console.log(self.)
         var scale = -3;
        // var interval = 67;
         var interval=Math.floor(self.svgWidth/10+scale);

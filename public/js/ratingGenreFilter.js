@@ -19,8 +19,8 @@ RatingGenreFilter.prototype.init = function() {
     var self = this;
 
     self.MovieGenres = [
-        "Drama", "Action", "Adventure", "Comedy", "Crime", "Family", "Fantasy",
-        "Thriller", "Sci-fi", "Mystery", "Romance", "Horror", "Other"];
+        "Romance", "Action", "Adventure", "Comedy", "Crime", "Family", "Fantasy",
+        "Thriller", "Sci-fi", "Mystery", "Drama", "Horror", "Other"];
 
 
    var tt = [];
@@ -84,7 +84,7 @@ RatingGenreFilter.prototype.init = function() {
         .attr("class", "xlabel")
         .text("Rating");
 
-
+    /*
     self.svg.append("g")
         .attr("class", "grid")
         .attr("transform", "translate(30,480)")
@@ -92,21 +92,23 @@ RatingGenreFilter.prototype.init = function() {
             .tickSize(-(self.svgHeight - 170))
             .tickFormat("")
         );
+        */
 
     self.svg.append("g")
         .attr("class", "grid")
         .attr("transform", "translate(40,0)")
-        .call(yaxis
-            .tickSize(-(self.svgWidth - 83))
+        .call(yaxis //83
+            .tickSize(-(self.svgWidth - 60))
             .tickFormat("")
             .ticks(9)
         );
 
 
-    self.leg = self.svg.append("g")
+    self.leg = self.svg
+        .append("g")
         .attr("class", "legend")
         .style("font-size", 14)
-        .attr("transform", "translate(70,15)");
+        .attr("transform", "translate(50,10)scale(0.8,0.8)");
 
     self.update(self.movies);
 
@@ -131,11 +133,8 @@ RatingGenreFilter.prototype.update = function(newMovieset) {
             GenresList[i][j] = 0;
 
     var temp = data.filter(function (d) {
-        for (var i = 0; i < d.values.length; i++) {
-            for (var index = 0; index < self.MovieGenres.length; index++) {
-                //if (d.values[i]["genres"].indexOf(self.MovieGenres[index]) != -1)
-                   // GenresList[d.key][index]++;
-                if(d.values[i]["genres"].indexOf("Drama")!=-1) GenresList[d.key][0]++;
+       for (var i = 0; i < d.values.length; i++) {
+                if(d.values[i]["genres"].indexOf("Romance")!=-1) GenresList[d.key][0]++;
                 if(d.values[i]["genres"].indexOf("Action")!=-1) GenresList[d.key][1]++;
                 if(d.values[i]["genres"].indexOf("Adventure")!=-1) GenresList[d.key][2]++;
                 if(d.values[i]["genres"].indexOf("Animation")!=-1) GenresList[d.key][12]++;
@@ -146,7 +145,7 @@ RatingGenreFilter.prototype.update = function(newMovieset) {
                 if(d.values[i]["genres"].indexOf("Thriller")!=-1) GenresList[d.key][7]++;
                 if(d.values[i]["genres"].indexOf("Sci")!=-1) GenresList[d.key][8]++;
                 if(d.values[i]["genres"].indexOf("Mystery")!=-1) GenresList[d.key][9]++;
-                if(d.values[i]["genres"].indexOf("Romance")!=-1) GenresList[d.key][10]++;
+                if(d.values[i]["genres"].indexOf("Drama")!=-1) GenresList[d.key][10]++;
                 if(d.values[i]["genres"].indexOf("Biography")!=-1) GenresList[d.key][12]++;
                 if(d.values[i]["genres"].indexOf("History")!=-1) GenresList[d.key][12]++;
                 if(d.values[i]["genres"].indexOf("War")!=-1) GenresList[d.key][12]++;
@@ -161,7 +160,7 @@ RatingGenreFilter.prototype.update = function(newMovieset) {
                 if(d.values[i]["genres"].indexOf("News")!=-1) GenresList[d.key][12]++;
                 if(d.values[i]["genres"].indexOf("Reality-TV")!=-1) GenresList[d.key][12]++;
                 if(d.values[i]["genres"].indexOf("Game-Show")!=-1) GenresList[d.key][12]++;
-            }
+           // }
         }
     });
 
@@ -230,6 +229,8 @@ RatingGenreFilter.prototype.update = function(newMovieset) {
         })
         .attr("cx", function (d) {
             //return d.x;
+            //56
+            console.log(self.svgWidth/13);
             return x(d["genre"])+56;
         })
         .style("fill", function (d) {
@@ -245,7 +246,7 @@ RatingGenreFilter.prototype.update = function(newMovieset) {
                // .style("left", (d3.event.pageX)/2 +200+ "px")
                 //.style("top", (d3.event.pageY)/2+150 + "px");
                 .style("left", +(d3.select(this).attr("cx"))-20+ "px")
-                .style("top", +(d3.select(this).attr("cy"))+250 + "px");
+                .style("top", +(d3.select(this).attr("cy"))+200 + "px");
 
             d3.select(this).style("fill", "#ff6600");
 
@@ -271,39 +272,35 @@ RatingGenreFilter.prototype.update = function(newMovieset) {
                 d3.select(this).classed("selected", true);
             }
 
-                 var selectedRating = [];
-                 var selectedGenres = []
-                 var selectedCircles = self.svg.selectAll("circle").filter(function(){
-                    return d3.select(this).classed("selected")
-                                 })
-                     .each(function(d){
-                           if(d["genre"] == 'Other')
-                           {
-                               for (var i = 0; i < self.OtherList.length; i++)
-                               {
-                                   selectedGenres.push(self.OtherList[i]);
-                               }
-                           }
-                            else{
-                               selectedGenres.push(d["genre"]);
-                            }
-                                 selectedRating.push(d["rating"]);
-                        });
+            var selectedRatingGenres = [];
+            var selectedCircles = self.svg.selectAll("circle").filter(function(){
+                return d3.select(this).classed("selected")
+            })
+                .each(function(d){
+                    var tempRating = d["rating"];
 
-                    console.log(selectedGenres);
-                    console.log(selectedRating);
+                    if(d["genre"] == 'Other')
+                    {
+                        for (var i = 0; i < self.OtherList.length; i++)
+                        {
+                            selectedRatingGenres.push([self.OtherList[i],tempRating]);
+                        }
+                    }
+                    else{
+                        selectedRatingGenres.push([d["genre"],tempRating]);
+                    }
+                });
 
+            self.interactivity.updatedGenreRatingFilter(selectedRatingGenres);
 
-            self.interactivity.updatedGenreRatingFilter([selectedRating,selectedGenres]);
-
-         });
+        });
 
 
 
     var legendQuantile = d3.legendColor()
             .labelFormat(d3.format(".2s"))
             .shape('circle')
-            .shapePadding(60)
+            .shapePadding(50)
             .orient('horizontal')
             .labelOffset(7)
             .scale(color)
