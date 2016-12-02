@@ -50,7 +50,7 @@ Interactivity.prototype.updatedYearFilter = function(selectedYears) {
         return yearCheck && countryCheck && genresRatingCheck;
     });
 
-
+    self.yearFilter.update(filteredMovie);
     self.mapFilter.updateMap(filteredMovie);
     self.ratingGenreFilter.update(filteredMovie);
     self.table.update(filteredMovie);
