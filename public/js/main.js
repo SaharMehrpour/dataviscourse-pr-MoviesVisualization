@@ -74,3 +74,11 @@ function closeNav() {
     document.getElementById("sideBar").style.width = "0";
     document.getElementById("main").style.marginLeft = "0";
 }
+
+function showInfo() {
+    document.getElementById("groupInfo").style.visibility = "visible";
+}
+
+function hideInfo() {
+    document.getElementById("groupInfo").style.visibility = "hidden";
+}
