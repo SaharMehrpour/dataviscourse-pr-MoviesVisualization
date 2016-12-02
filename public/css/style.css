@@ -15,6 +15,31 @@
     float: left;
 }
 
+.movieMiner {
+    padding-left: 20px;
+}
+h1 {
+    color: navy;
+    font-size: 40px;
+    font-family: courier
+}
+.movieMiner p {
+    font-size: 15px;
+}
+
+#groupInfo{
+    visibility: hidden;
+    position: absolute;
+    background-color: white;
+    color: navy;
+    font-family: courier;
+    border: 2px solid navy;
+    padding: 5px;
+}
+
+#info {
+    width: 50px;
+}
 /* Table div styles */
 
 #table_div  {
@@ -40,8 +65,8 @@
 }
 
 .headerCell0 {
-    padding-left: 20.5%;
-    width: 12%;
+    padding-left: 20%;
+    width: 15%;
 }
 
 .headerCell1 {
@@ -65,22 +90,27 @@
     border-top: 2px black solid;
     height: 35px;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .level0{
-    background-color: linen;
+    background-color: #FFFFFF;
 }
 
 .level1{
-    background-color: lavenderblush;
+    background-color: #f0f0f0;
 }
 
 .level2{
-    background-color: papayawhip;
+    background-color: #d9d9d9;
 }
 
 .level3{
-    background-color: palegoldenrod;
+    background-color: #bdbdbd;
+}
+
+.level4 {
+    background-color: #969696;
 }
 
 .tableCell{
@@ -92,10 +122,12 @@
 
 .tableCell0{
     width: 23%;
+    margin-top: 8px;
 }
 
 .tableCell1 {
     width: 5.3%;
+    margin-top: 8px;
 }
 
 .tableCell2 {
@@ -105,16 +137,23 @@
 .tableCell3 {
     width: 20%;
     text-align: center;
+    margin-top: 8px;
 }
 
 .tableCell4 {
     width: 20%;
     text-align: center;
+    margin-top: 8px;
 }
 
 .movieCell0 {
     width: 32%;
     padding-left: 1%;
+}
+
+.movieCell1 {
+    width: 15%;
+    margin-top: 8px;
 }
 
 .tableBody {
@@ -123,6 +162,7 @@
     height: auto;
     max-height: 1000px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .movieRow {
@@ -138,26 +178,30 @@
     width: 100%;
 }
 
+.sortOptionSVG > g {
+    cursor: pointer;
+}
+
 .sortOptionGroup {
     float: left;
 }
 
 .sortOptionRect {
     height: 40px;
-    fill: khaki;
+    fill: gainsboro;
     opacity: 0.5;
 }
 
 .activeFilter > rect {
-    fill: steelblue;
+    fill: dimgray
 }
 
 .textFilter {
     text-anchor:start;
-    font-size: 90%;
+    font-size: 12px;
 }
 
-.moving {
+.moving > rect {
     fill: lightblue;
 }
 
@@ -179,6 +223,11 @@
 #starSvg {
     width: 100px;
     height:40px;
+}
+
+.tableSubmitDiv {
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 /* Information div styles */
@@ -223,6 +272,21 @@ span#academyInfo {
     padding-left: 100px;
 }
 
+.statueSpanDiv{
+    float: left;
+}
+
+.statueSpanDiv:hover {
+    opacity: 0.5;
+}
+
+.infoTip {
+    background-color: #bdbdbd;
+    position: absolute;
+    text-align: center;
+    border: solid 1px darkgray;
+}
+
 .title {
     float: left;
     width: 20%;
@@ -237,7 +301,7 @@ span#academyInfo {
 
 .info {
     float: left;
-    width: 70%;
+    width: 60%;
 }
 
 .info text {
@@ -251,6 +315,22 @@ span#academyInfo {
 #ratingStarSvg {
     width: 200px;
     height: 40px;
+    float: left;
+}
+
+#ratingStarSvg:hover {
+    opacity: 0.5;
+}
+
+.ratingInfoDiv > .title {
+    margin-top: 10px;
+}
+
+#infoStarTip {
+    float: left;
+    background-color: #bdbdbd;
+    margin-top: 10px;
+    border: solid 1px darkgray;
 }
 
 /* Graph Styles */
@@ -299,6 +379,11 @@ span#academyInfo {
     height: 500px;
 }
 
+/* rating-genre styles */
+
+#rating_genre_filter_div {
+    height:600px;
+}
 
 /* year filter styles*/
 
@@ -306,53 +391,7 @@ span#academyInfo {
     height: 100px;
 }
 
-.yearFilterContainer{
-
-    padding: 30px;
-}
-.yearFilterSvg{
-
-    /* background-color: #f0c3e7;*/
-}
-
-.Year_xaxis_Text{
-
-    font-size: 17px;
-    font-weight: bold;
-    font-family: Times New Roman;
-}
-
-.text_year_selcted{
-
-    font-size: 15px;
-    font-family: sans-serif;
-
-}
-
-#yearPath{
-
-    fill: rgb(199, 233, 180) /*rgb(127, 205, 187)*/;
-}
-
-#yearLine{
-
-    fill:none;
-    stroke: rgb(34, 94, 168);
-    stroke-width:3px;
-}
-
-
-/* rating-genre styles */
-
-#rating_genre_filter_div {
-    height:600px;
-}
-
-.ratingGenreContainer{
-
-    padding: 20px;
-}
-
+/*genrerate*/
 .svgratinggenre{
 
     /* background-color: #f0c3e7;*/
@@ -363,10 +402,6 @@ span#academyInfo {
     font-size: 15px;
     font-weight: bold;
     font-family: Times New Roman;
-    text-anchor:end;
-    dx: -.8em;
-    dy:.15em;
-
 }
 
 .xlabel{
@@ -376,11 +411,9 @@ span#academyInfo {
     font-size: 20px;
     font-weight: bold;
 }
-
-
 .grid line {
-    stroke: lightsteelblue;
-    stroke-opacity: 2;
+    stroke: #ea12f0;
+    stroke-opacity: 1;
     stroke-dasharray: 3;
 }
 
@@ -416,9 +449,10 @@ div.tooltip:after {
     color: rgba(0, 0, 0, 0.8);
     content: "\25BC";
     position: absolute;
-    top: 42px;
-    right: 0px;
+    top: 20px;
+    right: 41px;
     text-align: center;
+    transform: rotate(90deg);
 }
 
 div.tooltip.n:after {
@@ -427,16 +461,12 @@ div.tooltip.n:after {
     left: 100%;
 }
 
-.selected{
-    stroke-width:5px;
-
-}
 
 /*SIDEBAR STYLES*/
 
 /* The side navigation menu */
 .sidenav {
-    height: 100%; /* 100% Full-height */
+    /*height: 100%; /* 100% Full-height */
     /*width: 50%; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
     z-index: 1; /* Stay on top */
@@ -488,5 +518,68 @@ div.tooltip.n:after {
 
 }
 
+/* Map */
 
+.d3-tip {
+    /*line-height: 5;*/
+    padding-left: 10px;
+    padding-right: 10px;
+    min-width: 400px;
+    border-style: groove;
+    /*padding: 12px;*/
+    background: #FFFFFF;
+    color: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    pointer-events: none;
+}
+.tooltip-title{
+    font-size:18px;
+    font-family: "Arial Black";
 
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+    /*box-sizing: border-box;*/
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    /*line-height: 1;*/
+    color: rgba(0, 0, 0, 0.8);
+    position: relative;
+    pointer-events: none;
+}
+
+/* Northward tooltips */
+.d3-tip.n:after {
+    content: "\25BC";
+    /*margin: -1px 0 0 0;*/
+    top: 100%;
+    left: 0;
+    text-align: center;
+}
+
+/* Eastward tooltips */
+.d3-tip.e:after {
+    content: "\26A0";
+    /*margin: -4px 0 0 0;*/
+    top: -800px;
+    left: -8px;
+}
+
+/* Southward tooltips */
+.d3-tip.s:after {
+    content: "\25B2";
+    /*margin: 4px 0 1px 0;*/
+    top: -8px;
+    left: 1481px;
+    text-align: center;
+}
+
+/* Westward tooltips */
+.d3-tip.w:after {
+    content: "\25B6";
+    /*margin: -4px 0 0 -1px;*/
+    top: 50%;
+    left: 100%;
+}
