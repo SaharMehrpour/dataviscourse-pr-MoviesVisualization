@@ -27,6 +27,13 @@ Interactivity.prototype.init = function(yearFilter, ratingGenreFilter, mapFilter
 Interactivity.prototype.updatedYearFilter = function(selectedYears) {
     var self = this;
 
+    var filteredMovies = self.movies.filter(function (d) {
+        return d.title_year > selectedYears[0] &&
+            d.title_year < selectedYears[1];
+    });
+
+    self.ratingGenreFilter.update(filteredMovies);
+
     // update self.filter
     // filteredMovies = self.movies.filter(function(d){based on self.filters})
 
