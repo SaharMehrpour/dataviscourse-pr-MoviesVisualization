@@ -113,9 +113,13 @@ Information.prototype.init = function() {
         .append("text")
         .text("IMDB Rating");
 
-    var ratingSVG = ratingDiv
+    var starsDiv = ratingDiv
         .append("div")
-        .attr("class","info")
+        .attr("class","info");
+
+    var ratingSVG = starsDiv
+        .append("div")
+        .attr("id","starsDiv")
         .append("svg")
         .attr("id", "ratingStarSvg")
         .append("defs")
@@ -125,9 +129,14 @@ Information.prototype.init = function() {
         .attr('width', 200)
         .attr('height', 39)
         .append("image")
-        .attr("xlink:href", "data/tenStars.png")
+        .attr("xlink:href", "images/tenStars.png")
         .attr('width', 200)
         .attr('height', 39);
+
+    starsDiv.append("div")
+        .attr("id","infoStarTip")
+        .style("opacity","0")
+        .append("text");
 
     var infoDivs = infoContainerDiv
         .selectAll(".infoDiv")
@@ -168,8 +177,10 @@ Information.prototype.init = function() {
         .attr("id", "posterInfo")
         .on("error",function () {
             d3.select(this)
-                .attr("src","data/loading-failed.png");
+                .attr("src","images/loading-failed.png");
         });
+
+    self.createToolTip();
 
     self.update(self.movies[2607]);
 
@@ -181,44 +192,6 @@ Information.prototype.init = function() {
 Information.prototype.update = function(selectedMovie) {
     var self = this;
 
-    // Data Binding
-
-    // Director
-    var nestedDataDirector = d3.nest().key(function (d) {
-        return d["director_name"];
-    }).entries(self.movies);
-
-    var directorMovie = nestedDataDirector.filter(function (d) {
-        return d.key === selectedMovie["director_name"];
-    })[0];
-
-    // Actor1
-    var nestedDataActor1 = d3.nest().key(function (d) {
-        return d["actor_1_name"];
-    }).entries(self.movies);
-
-    var actor1Movie = nestedDataActor1.filter(function (d) {
-        return d.key === selectedMovie["actor_1_name"];
-    })[0];
-
-    // Actor 2
-    var nestedDataActor2 = d3.nest().key(function (d) {
-        return d["actor_2_name"];
-    }).entries(self.movies);
-
-    var actor2Movie = nestedDataActor2.filter(function (d) {
-        return d.key === selectedMovie["actor_2_name"];
-    })[0];
-
-    // Actor 3
-    var nestedDataActor3 = d3.nest().key(function (d) {
-        return d["actor_3_name"];
-    }).entries(self.movies);
-
-    var actor3Movie = nestedDataActor3.filter(function (d) {
-        return d.key === selectedMovie["actor_3_name"];
-    })[0];
-
     // Updating the divs
 
     var title = self.div.select("#titleInfo")
@@ -226,26 +199,22 @@ Information.prototype.update = function(selectedMovie) {
             + " (" + selectedMovie["title_year"] + ")");
 
     var directorDiv = self.div.select("#directorInfo")
-        .text(selectedMovie["director_name"]
-            + " (" + directorMovie.values.length + " movies)");
+        .text(selectedMovie["director_name"]);
 
     var actor1Div = self.div.select("#actor1Info")
-        .text(selectedMovie["actor_1_name"]
-            + " (" + actor1Movie.values.length + " movies)"); // call tool tip
+        .text(selectedMovie["actor_1_name"]);
 
     var actor2Div = self.div.select("#actor2Info")
-        .text(selectedMovie["actor_2_name"]
-            + " (" + actor2Movie.values.length + " movies)"); // call tool tip
+        .text(selectedMovie["actor_2_name"]);
 
     var actor3Div = self.div.select("#actor3Info")
-        .text(selectedMovie["actor_3_name"]
-            + " (" + actor3Movie.values.length + " movies)"); // call tool tip
+        .text(selectedMovie["actor_3_name"]);
 
     var countryDiv = self.div.select("#countryInfo")
         .text(selectedMovie["country"]);
 
     var genresDiv = self.div.select("#genresInfo")
-        .text(selectedMovie["genres"].replace(/\|/g, ', ')); // decompose them
+        .text(selectedMovie["genres"].replace(/\|/g, ', '));
 
     var contentInfoDiv = self.div.select("#contentInfo")
         .text(selectedMovie["content_rating"]);
@@ -257,14 +226,34 @@ Information.prototype.update = function(selectedMovie) {
         .text(d3.format(',')(+selectedMovie["budget"]));
 
 
+    self.div.select("#infoStarTip")
+        .select("text")
+        .text([selectedMovie["imdb_score"]] + " out of 10");
+
+    self.div.select("#starsDiv")
+        .on("mouseover",function () {
+            self.div.select("#infoStarTip")
+                .style("opacity", "0")
+                .transition()
+                .duration(300)
+                .style("opacity", "1");
+        })
+        .on("mouseout", function () {
+            self.div.select("#infoStarTip")
+                .style("opacity", "1")
+                .transition()
+                .duration(300)
+                .style("opacity", "0")
+
+        });
+
     self.div.select("#posterInfo")
-        .attr("src", "data/loading.gif");
+        .attr("src", "images/loading.gif");
 
     var rects = self.div.select("#ratingStarSvg")
         .selectAll("rect")
         .data([selectedMovie["imdb_score"]]);
 
-    rects.exit().remove();
     rects.enter()
         .append("rect")
         .merge(rects)
@@ -333,24 +322,62 @@ Information.prototype.getAcademyInfo = function (selectedMovie) {
 
     var oscars = [];
     if (academyPicture.length === 1)
-        oscars.push("academyPicture");
+        oscars.push("Picture");
     if (academyActor.length === 1)
-        oscars.push("academyActor");
+        oscars.push("Actor");
     if (academyActress.length === 1)
-        oscars.push("academyActress");
+        oscars.push("Actress");
     if (academyDirector.length === 1)
-        oscars.push("academyDirector");
+        oscars.push("Director");
 
     var statues = self.div.select("#academyInfo")
-        .selectAll("img")
+        .selectAll("div")
         .data(oscars);
 
     statues.enter()
+        .append("div")
+        .attr("class", "statueSpanDiv")
+        .on("mouseover", function (d) {
+
+            if (d3.select("#main").style("margin-left") == "0px") {
+
+                self.tip
+                    .style("left", (d3.event.pageX / 2 + 20) + "px")
+                    .style("top", (d3.event.pageY / 2 - 140) + "px")
+                    .html(
+                        "Academy Award" + "<br/>" + "for" + "<br/>" + "best " + d
+                    )
+                    .style("opacity", 0)
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 1);
+            }
+        })
+        .on("mouseout", function (d) {
+            if (d3.select("#main").style("margin-left") == "0px") {
+                self.tip.style("opacity", 1)
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0);
+            }
+
+        })
         .append("img")
         .merge(statues)
-        .attr("src", "data/academy.jpg");
+        .attr("src", "images/academy.jpg");
 
     statues.exit()
         .remove();
+
+};
+
+Information.prototype.createToolTip = function () {
+    var self = this;
+
+    self.tip = self.div.append("div")
+        .attr("class","infoTip")
+        .style("opacity","0");
+
+    self.tip.append("text");
 
 };

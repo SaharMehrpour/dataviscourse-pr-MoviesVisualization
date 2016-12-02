@@ -6,6 +6,7 @@ function Table(movies,interactivity) {
     var self = this;
 
     self.movies = movies;
+    self.allMovies = movies;
     self.interactivity = interactivity;
 
     self.div = d3.select("#table_div");
@@ -13,7 +14,7 @@ function Table(movies,interactivity) {
 
     self.tableDivsWidth = parseInt(window.getComputedStyle(document.getElementById("table_div"),null).getPropertyValue("width"),10);
 
-    self.xScaleBudget = d3.scaleLinear()
+    self.xScaleBudget = d3.scaleLog()
         .range([0,0.18 * self.tableDivsWidth]); // headerCell2
 
     self.xScaleGross = d3.scaleLog()
@@ -30,12 +31,11 @@ Table.prototype.init = function() {
 
     self.sortOptions = [{"Option": "title_year", "Text": "Year", "Order": 0},
         {"Option": "country", "Text": "Country", "Order": 1},
-        {"Option": "imdb_score", "Text": "IMDB Score", "Order": 2},
-        {"Option": "alph", "Text": "Alphabetical", "Order": 3},
+        {"Option": "imdb_score", "Text": "Rating", "Order": 2},
+        {"Option": "alph", "Text": "Alphabet.", "Order": 3},
         {"Option" : "gross", "Text" : "Gross", "Order": 4},
         {"Option" : "budget", "Text" : "Budget", "Order": 5},
-        {"Option" : "content_rating", "Text" : "Content Rating", "Order": 6}];
-
+        {"Option" : "content_rating", "Text" : "Content", "Order": 6}];
 
     self.optionWidth = self.tableDivsWidth / (self.sortOptions.length + 3); // 80
     self.optionPadding = self.optionWidth / 10; // 10
@@ -49,7 +49,7 @@ Table.prototype.init = function() {
 
     self.createSortOptions();
 
-    self.header = ["number Of Movies", "Average Rating (out of 5)", "Budget", "Gross"];
+    self.header = ["number Of Movies", "Average Rating (5-Star)", "Budget", "Gross"];
 
     self.computeXscales(self.movies);
 
@@ -139,6 +139,13 @@ Table.prototype.populateTable = function(parentDivId,data) {
             return "tableCell tableCell" + i;
         })
         .each(function (d, i) {
+
+            if (i == 0) {
+                if (d["value"].length > 15) {
+                    d3.select(this).style("margin-top", 0);
+                }
+            }
+
             if (i == 2) { // Stars
                 var svg = d3.select(this)
                     .append("svg");
@@ -153,9 +160,9 @@ Table.prototype.populateTable = function(parentDivId,data) {
                     .attr('width', 100)
                     .attr('height', 39)
                     .append("image")
-                    .attr("xlink:href", "data/fiveStars.png")
+                    .attr("xlink:href", "images/fiveStars.png")
                     .attr('width', 100)
-                    .attr('height', 39);
+                    .attr('height', 30);
                 svg
                     .append("rect")
                     .attr("x", 0)
@@ -251,6 +258,16 @@ Table.prototype.populateTable = function(parentDivId,data) {
 Table.prototype.populateMovie = function(parentDivId,data,level) {
     var self = this;
 
+    if (data.length > 300) {
+        self.div.select("#tableBody").selectAll("div").remove();
+        self.div.select("#tableBody")
+            .append("div")
+            .attr("id","tempTable")
+            .text("Too many movies to populate. Please select more grouping options");
+        return;
+    }
+
+
     var rowsToPopulate = self.div.select(parentDivId)
         .selectAll(".dataRow")
         .data(data)
@@ -289,11 +306,18 @@ Table.prototype.populateMovie = function(parentDivId,data,level) {
         })
         .enter()
         .append("div")
-        .attr("class",function (d,i) {
-            if(i==0) return "tableCell movieCell0";
-            return "tableCell tableCell" + (i+1);
+        .attr("class", function (d, i) {
+            if (i <= 1) return "tableCell movieCell" + i;
+            return "tableCell tableCell" + (i + 1);
         })
-        .html(function (d,i) {
+        .each(function (d,i) {
+            if (i == 0) {
+                if (d["value"].length > 20) {
+                    d3.select(this).style("margin-top", 0);
+                }
+            }
+        })
+        .html(function (d, i) {
             if (i == 2 || i == 3)
                 return format(d.value);
             return d.value
@@ -302,10 +326,10 @@ Table.prototype.populateMovie = function(parentDivId,data,level) {
         .duration(2000)
         .style("left", function (d, i) {
             var thisLocation = cellLeft;
-            if(i==3)
+            if (i == 3)
                 cellLeft = 0;
             else
-                cellLeft += parseInt(d3.select(this).style("width"),10) + 0.03 * self.tableDivsWidth; //(2 * padding)
+                cellLeft += parseInt(d3.select(this).style("width"), 10) + 0.03 * self.tableDivsWidth; //(2 * padding)
             return thisLocation + "px"
         });
 };
@@ -428,7 +452,7 @@ Table.prototype.movieData = function(data,level){
         movieInfo.push({
             "level": level,
             "value": {
-                "title": data[j]["movie_title"],
+                "title": data[j]["movie_title"].slice(0,50),
                 "rating": data[j]["imdb_score"],
                 "budget": data[j]["budget"],
                 "gross": data[j]["gross"]
@@ -515,7 +539,7 @@ Table.prototype.createSortOptions = function() {
         .text("Drag grouping options to order, " +
             "drag them to the left side to deactivate, " +
             "drag them to right to activate. " +
-            "Steelblue options are active options");
+            "Dark grey options are active options");
 
     var sortOptionsDiv = sortDiv
         .append("div")
@@ -564,7 +588,8 @@ Table.prototype.createSortOptions = function() {
         });
 
     var buttonDiv = sortDiv
-        .append("div");
+        .append("div")
+        .attr("class","tableSubmitDiv");
 
     var checkBox = buttonDiv.append("input")
         .attr("type","checkbox")
@@ -573,6 +598,35 @@ Table.prototype.createSortOptions = function() {
 
     buttonDiv.append("text")
         .text("Descending");
+
+
+    var buttonSubmit = buttonDiv
+        .append("div")
+        .attr("class","tableSubmitDiv")
+        .append("input")
+        .attr("type","submit")
+        .attr("width",100)
+        .attr("height",100)
+        .on("click",function () {
+            // update self.filters!
+            self.updateFiltersOrder();
+        })
+        .attr("value","Apply");
+/*
+    var buttonReset = buttonDiv
+        .append("div")
+        .attr("class","tableSubmitDiv")
+        .append("input")
+        .attr("type","submit")
+        .attr("width",100)
+        .attr("height",100)
+        .on("click",function () {
+            // update self.filters!
+            self.update(self.allMovies);
+        })
+        .attr("value","Show all movies.");
+*/
+    /*
 
     var buttonSvg = buttonDiv
         .append("svg")
@@ -596,23 +650,25 @@ Table.prototype.createSortOptions = function() {
         .attr("x", self.optionLocation.textX)
         .attr("y", self.optionLocation.textY)
         .text("Apply");
+
+    */
 };
 
 Table.prototype.dragstarted = function(draggingElement) {
     var self = this;
 
     d3.select(draggingElement)
-        .select("rect")
-        .classed("moving", true);
+        .classed("moving", true)
+        .select("rect");
 };
 
 Table.prototype.dragended = function(draggingElement) {
 
     var self = this;
-    var movingFilter = d3.select(draggingElement);
+    var movingFilter = d3.select(draggingElement)
+        .classed("moving", false);
 
     movingFilter.select("rect")
-        .classed("moving", false)
         .transition()
         .duration(100)
         .attr("x", function () {
@@ -746,8 +802,12 @@ Table.prototype.updateFiltersOrder = function() {
 
     if (newOrder.length == 0) {
         var newMovieList = self.movieData(self.movies, 0);
-        if (newMovieList.length > 200) {
-            alert("Too many movies to populate");
+        if (newMovieList.length > 300) {
+            self.div.select("#tableBody").selectAll("div").remove();
+            self.div.select("#tableBody")
+                .append("div")
+                .attr("id","tempTable")
+                .text("Too many movies to populate. Please select more grouping options");
             return;
         }
         self.sortOptions = newOrder;
@@ -765,52 +825,69 @@ Table.prototype.update = function(newMovies) {
 
     var self = this;
 
+    if (newMovies.length == 0) {
+
+        self.div.select("#tableBody").selectAll("div").remove();
+        self.div.select("#tableBody")
+            .append("div")
+            .attr("id","tempTable")
+            .text("There is no movie to show!");
+        return;
+    }
+
+    self.div.select("#tempTable")
+        .remove();
+
     self.movies = newMovies;
 
+    var filters = self.div
+        .select("#sort_options")
+        .selectAll('g');
+
     if (newMovies.length <= 50) {
-        var allFilters = self.div.select("#sort_options")
-            .selectAll('g')
-            .classed("activeFilter",false);
+        filters.classed("activeFilter",false);
     }
     else {
-        var inactiveOrder = self.sortOptions.length - 1;
+        self.inactiveOrder = filters.size() - 1;
+        self.activeOrder = 0;
 
-        var filters = self.div.select("#sort_options")
-            .selectAll('g')
-            .classed("activeFilter", true);
-
-        filters = self.div.select("#sort_options")
+        self.div
+            .select("#sort_options")
             .selectAll('g')
             .each(function (d) {
 
                 var thisElement = d3.select(this);
-                //var order = thisElement.attr("data-order");
                 var option = d.Option;
 
-                if (option == 'title_year' || option == 'imdb_score' || option == 'country') {
-
-                    if (self.interactivity.filters[option].length > 0) { // used filter
-
-                        var swapElements = self.div.select("#sort_options")
-                            .selectAll('g').filter(function () {
-                                return d3.select(this).attr("data-order") != thisElement.attr("data-order")
-                                    && d3.select(this).classed("activeFilter");
-                            })
-                            .attr("data-order", function (d, i) {
-                                return d3.select(this).attr("data-order") - 1;
-                            });
-
-                        thisElement
-                            .attr("data-order", inactiveOrder)
-                            .classed("activeFilter", false);
-
-                        inactiveOrder -= 1;
-                    }
+                switch (option) {
+                    case 'title_year' :
+                    case 'imdb_score':
+                    case 'country':
+                        if (self.interactivity.filters[option].length > 0) {
+                            thisElement.attr("data-order", self.inactiveOrder)
+                                .classed("activeFilter",false);
+                            self.inactiveOrder -= 1;
+                            break;
+                        }
+                        else {
+                            thisElement.attr("data-order", self.activeOrder)
+                                .classed("activeFilter", true);
+                            self.activeOrder += 1;
+                            break;
+                        }
+                    default:
+                        thisElement.attr("data-order", self.activeOrder)
+                            .classed("activeFilter", true);
+                        self.activeOrder += 1;
+                        break;
                 }
             });
     }
 
-    filters.each(function () {
+    self.div
+        .select("#sort_options")
+        .selectAll('g')
+        .each(function () {
         var thisElement = d3.select(this);
 
         thisElement.select("rect")
