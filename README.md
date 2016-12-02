@@ -1,13 +1,13 @@
 # Movie Miner
 
 
-*Movie Miner* is a visualization to help users explore movie data in terms of similar featurs or collaboration among actors and directors.
-This Visualization also let users to search for a specific movie with particular featues such as "*Year*", "*Country*" in which a movie is produced, IMDB "*Rating*", and "*Genre*". The information is based on the [IMDB](https://www.imdb.com) website.
+*Movie Miner* is a visualization to help users explore movie data and find movies they would want to watch based on features that they themselves can control. The options of features are wide ranging from country, genre and year of production to films in which certian actors and directors collaborated.
+The information is based on the [IMDB](https://www.imdb.com) website.
 
 ## Main Views
 
-There are two major columns in *Movie Miner*. The right layout mainly shows a overall information about the movie data, while the left column is based on a specific movie.
-On the right of the visualization, there are several views: "*Year Filter*", "*Rating-Genre Filter*", "*Map Filter*", and the "*Table*". On the left Column, there are the "*Graph*" and "*Information*" view.
+There are two major columns in *Movie Miner*. The left layout (or the sidebar) mainly shows a overall information about the movie data, while the right column is based on a specific movie.
+In the left column, there are several views: "*Year Filter*", "*Rating-Genre Filter*", "*Map Filter*", and the "*Table*". In the rightt column, we have placed the "*Graph*" and "*Information*" view.
 
 ### Year Filter
 
@@ -21,7 +21,7 @@ Selecting and unselecting is done by clicking on a circle.
 
 ### Map Filter
 
-The purpose of the Map filter is to give an insight about the number of movies produced in each country. The map is zoomable nad draggable. The number of movies is coded by a color on each country. The logarithmic scale is used here for the same reason described above. 
+The purpose of the Map filter is to give an insight about the number of movies produced in each country. The map is zoomable nad draggable. The number of movies is coded by a color on each country. The scale here is quantized due to the lopsided nature of the data set so that the colour distribution looks most appealing while giving apt information via the legend.
 Selecting and unselecting is done by clicking on a country.
 
 ### Table
