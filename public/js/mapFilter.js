@@ -10,7 +10,7 @@ function MapFilter(movies, interactivity) {
     self.interactivity = interactivity;
     self.movies = movies;
 
-    self.div = d3.select("#map_filter_div").append('div').style('padding','25px');
+    self.div = d3.select("#map_filter_div").append('div').style('padding','40px 25px 25px 25px');
 
     self.init();
 };
@@ -23,9 +23,17 @@ MapFilter.prototype.init = function(){
 	d3.csv("data/countrycode.csv",function(error,data){country=data
 	
 	//console.log(self.svg)
+	self.div.append('input').attr('width',100).attr('height',100).attr('fill','blue').attr('type','submit')
+		.style('font-family','courier')
+		.attr('value','Help Me Locate')
+		.on ('click', function () {
 	
+		return search(d3.select(this.parentNode).select("#myVal").property("value"));
+	})
 
-	self.div.append('input').attr('width',100).attr('height',100).attr("type","text").attr("id","myVal").on('keyup',function () { 
+	self.div.append('input').attr('width',100).attr('height',100)
+	.style('border','1px dotted').style('font-family','courier')
+	.attr("type","text").attr("id","myVal").on('keyup',function () { 
 
 		if (d3.event.keyCode == 13)
 		
@@ -35,15 +43,20 @@ MapFilter.prototype.init = function(){
 			
 	
 	});
-		self.div.append('input').attr('width',100).attr('height',100).attr('fill','blue').attr('type','submit').on ('click', function () {
-	
-		return search(d3.select(this.parentNode).select("#myVal").property("value"));
-	})
+
 	
     self.svg = self.div.append("svg").attr('padding','10').attr('height',400).attr('width',1000).attr('id','map');//.call(d3.zoom().on("zoom", function () {
     //self.svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
  // })).append('g')
 	//self.svg=self.div.append("svg").
+	self.tooltip = self.div
+    .append("div")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+    .style("background", "#000")
+    .text("a simple tooltip");
+	
 	self.svg.append('g');
 
 	function search(text) {
@@ -97,42 +110,48 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
 
     d3.json("data/world.json",function(json){//console.log(json)
     
-    tooltip_render = function (tooltip_data) {
-    var self = this;
-    //var text = "<h2 class ="  + (tooltip_data) + " >" + tooltip_data.state + "</h2>";
-    // text +=  "Electoral Votes: " + tooltip_data.electoralVotes;
-//     text += "<ul>"
-//     text += "</ul>";
-	console.log(tooltip_data)
-	var text = tooltip_data.state;
-    return text;
-}
-    
-        tip = d3.tip().attr('class', 'd3-tip')
-        .direction('se')
-        .offset(function() {
-            return [0,0];
-        })
-        .html(function(d) {
-        	 console.log("yes")
-           //  populate data in the following format
-              tooltip_data = {
-              "state": 'yes'
-              }
-             // pass this as an argument to the tooltip_render function then,
-             // return the HTML content returned from that method.
-             
-            return tooltip_render(tooltip_data);
-        });
-    
-		self.svg.select('g').call(tip);
+   //  tooltip_render = function (tooltip_data) {
+//     var self = this;
+//     //var text = "<h2 class ="  + (tooltip_data) + " >" + tooltip_data.state + "</h2>";
+//     // text +=  "Electoral Votes: " + tooltip_data.electoralVotes;
+// //     text += "<ul>"
+// //     text += "</ul>";
+// 	console.log(tooltip_data)
+// 	var text = tooltip_data.state;
+//     return text;
+// }
+//     
+//         tip = d3.tip().attr('class', 'd3-tip')
+//         .direction('se')
+//         .offset(function() {
+//             return [0,0];
+//         })
+//         .html(function(d) {
+//         	 console.log("yes")
+//            //  populate data in the following format
+//               tooltip_data = {
+//               "state": 'yes'
+//               }
+//              // pass this as an argument to the tooltip_render function then,
+//              // return the HTML content returned from that method.
+//              
+//             return tooltip_render(tooltip_data);
+//         });
+//     
+// 		self.svg.select('g').call(tip);
 
 // var tip = d3.tip()
 //       .attr("class", "d3-tip")
 //       .offset([-8, 0])
 //       .html(function(d) { console.log(d.id);return "Radius: " + d.id; });
 //     self.svg.select('g').call(tip);
-    
+//         var div = self.div.append("div")
+//         .attr("class", "tooltip")
+//         .style("opacity", function(d){//console.log("yes; I exist");
+//         return 0});
+
+        var tooltip = d3.select('#map_filter_div').append('div')
+            .style('display', 'none').style('position','absolute');
         var map=self.svg.select('g').selectAll("path")
             .data(topojson.feature(json, json.objects.countries).features)
         map.exit().remove
@@ -148,12 +167,35 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
             .attr("opacity",0.75)
             //#000099
             .on("mouseover",function(d){
-             console.log(' test' );
-            	d3.select(this).attr('stroke','black').attr('stroke-width',0.6);
+             var mouse = d3.mouse(svg.node()).map(function(d) {//console.log(parseInt(d))
+                        return parseInt(d);
+                    });
+            tooltip//classed('hidden', false)
+            		.attr('color', '#222')
+        			.attr('background-color', '#fff')
+        //padding: .5em;
+        //text-shadow: #f5f5f5 0 1px 0;
+        //border-radius: 2px;
+        			.attr('opacity', 0.9)
+       				.attr('position', 'absolute')
+                    .attr('style', 'left:' + (mouse[0] + 15) +
+                         'px; top:' + (mouse[1] - 35) + 'px')
+                    .attr('transform','translate (200,0)')
+                    .html(function(){for (var j=1;j<countryList.length;j++){
+					c=countryList[j].key.split(',')
+					if (d.id==c[1]){return c[0]}}});
 
-					//.classed('yearText',true)
+					
+				d3.select(this).attr('stroke','black').attr('stroke-width',0.6);
             })       
-            .on("mouseout",function(){d3.select(this).attr('stroke','white').attr('stroke-width',0.5);tip.hide})
+            .on("mouseout",function(){
+            tooltip.style('display','none');
+//              div.transition()
+         //        .duration(5)
+//                 .style("opacity", 0);
+            d3.select(this).attr('stroke','white').attr('stroke-width',0.5);
+            //tip.hide
+            })
 			
 			.on("click", function(d){d3.selectAll(this).attr('stroke','white').attr('stroke-width',0.5);
 			cList=[];//x= IList.includes('"'+d.id+'"'); 
@@ -220,7 +262,7 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
         item=c[1]
         
         //IList.push(item)
-        d3.select('#'+c[1]).attr('stroke','orange').attr('stroke-width',1)
+        d3.select('#'+c[1]).attr('stroke','orange').attr('stroke-width',0.8)
        // mList=[]
         //listed(IList,mList)
    		 }
@@ -229,7 +271,8 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
 		var zoom = d3.zoom()
 		.translateExtent([150, 450])
 		.scaleExtent([1, 100])
-		.on("zoom", zoomed);
+		.on("zoom", zoomed)
+		.duration('100');
 	
 	self.svg.select('g')
 // 		.call(zoom.translateBy, 150,450)
@@ -247,8 +290,8 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
 	self.svg.select('g')
 	.attr("transform", "translate(" + d3.event.transform.x + "," + d3.event.transform.y + ") scale(" + d3.event.transform.k + ")");
 
-self.svg.call(d3.drag()
-        .on("start", dragstarted)
+self.svg.select('g').call(d3.drag()
+        .on("start", function(d){console.log(d);return dragstarted})
         .on("drag", dragged)
         .on("end", dragended));
 
