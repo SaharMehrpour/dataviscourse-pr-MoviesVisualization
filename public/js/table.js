@@ -139,6 +139,13 @@ Table.prototype.populateTable = function(parentDivId,data) {
             return "tableCell tableCell" + i;
         })
         .each(function (d, i) {
+
+            if (i == 0) {
+                if (d["value"].length > 15) {
+                    d3.select(this).style("margin-top", 0);
+                }
+            }
+
             if (i == 2) { // Stars
                 var svg = d3.select(this)
                     .append("svg");
@@ -303,6 +310,13 @@ Table.prototype.populateMovie = function(parentDivId,data,level) {
             if (i <= 1) return "tableCell movieCell" + i;
             return "tableCell tableCell" + (i + 1);
         })
+        .each(function (d,i) {
+            if (i == 0) {
+                if (d["value"].length > 20) {
+                    d3.select(this).style("margin-top", 0);
+                }
+            }
+        })
         .html(function (d, i) {
             if (i == 2 || i == 3)
                 return format(d.value);
@@ -438,7 +452,7 @@ Table.prototype.movieData = function(data,level){
         movieInfo.push({
             "level": level,
             "value": {
-                "title": data[j]["movie_title"],
+                "title": data[j]["movie_title"].slice(0,50),
                 "rating": data[j]["imdb_score"],
                 "budget": data[j]["budget"],
                 "gross": data[j]["gross"]
@@ -525,7 +539,7 @@ Table.prototype.createSortOptions = function() {
         .text("Drag grouping options to order, " +
             "drag them to the left side to deactivate, " +
             "drag them to right to activate. " +
-            "Steelblue options are active options");
+            "Dark grey options are active options");
 
     var sortOptionsDiv = sortDiv
         .append("div")

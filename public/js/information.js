@@ -195,25 +195,26 @@ Information.prototype.update = function(selectedMovie) {
     // Updating the divs
 
     var title = self.div.select("#titleInfo")
-        .text(selectedMovie["movie_title"]);
+        .text(selectedMovie["movie_title"]
+            + " (" + selectedMovie["title_year"] + ")");
 
     var directorDiv = self.div.select("#directorInfo")
         .text(selectedMovie["director_name"]);
 
     var actor1Div = self.div.select("#actor1Info")
-        .text(selectedMovie["actor_1_name"]); // call tool tip
+        .text(selectedMovie["actor_1_name"]);
 
     var actor2Div = self.div.select("#actor2Info")
-        .text(selectedMovie["actor_2_name"]); // call tool tip
+        .text(selectedMovie["actor_2_name"]);
 
     var actor3Div = self.div.select("#actor3Info")
-        .text(selectedMovie["actor_3_name"]); // call tool tip
+        .text(selectedMovie["actor_3_name"]);
 
     var countryDiv = self.div.select("#countryInfo")
         .text(selectedMovie["country"]);
 
     var genresDiv = self.div.select("#genresInfo")
-        .text(selectedMovie["genres"].replace(/\|/g, ', ')); // decompose them
+        .text(selectedMovie["genres"].replace(/\|/g, ', '));
 
     var contentInfoDiv = self.div.select("#contentInfo")
         .text(selectedMovie["content_rating"]);
