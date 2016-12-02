@@ -32,7 +32,7 @@ Graph.prototype.init = function() {
     //Gets access to the div element created for this chart from HTML
     self.svgBounds = divvotesPercentage.node().getBoundingClientRect();
     self.svgWidth = self.svgBounds.width - self.margin.left - self.margin.right;
-    self.svgHeight = 800;
+    self.svgHeight = 1000;
 
     //creates svg element within the div
     self.svg = divvotesPercentage.append("svg")
@@ -447,8 +447,8 @@ Graph.prototype.refresh = function () {
         });
 
     nodeGroupEnter.append("text")
-        .attr("x",10)
-        .attr("y",-10)
+        .attr("x",15)
+        .attr("y",-15)
         .text(function(d) {
             return d.id;
         })
@@ -602,7 +602,7 @@ Graph.prototype.update = function(selectedMovie) {
                 return radius + (20 * d.parents.length);
             }
             else if (d.type == "g")
-                return radius + 50;
+                return radius + 20;
             else
                 return radius * 10;
         }).strength(0.2).iterations(1) )
