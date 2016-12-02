@@ -148,11 +148,13 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
             .attr("opacity",0.75)
             //#000099
             .on("mouseover",function(d){
+             console.log(' test' );
             	d3.select(this).attr('stroke','black').attr('stroke-width',0.6);
-            	
-            	tip.show;
+
+					//.classed('yearText',true)
             })       
             .on("mouseout",function(){d3.select(this).attr('stroke','white').attr('stroke-width',0.5);tip.hide})
+			
 			.on("click", function(d){d3.selectAll(this).attr('stroke','white').attr('stroke-width',0.5);
 			cList=[];//x= IList.includes('"'+d.id+'"'); 
 			
@@ -174,18 +176,18 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
 
 			listed(IList,cList)
 
-//call the year filter and genre and rating and table
-
-//console.log(mList)
-
-/*else if ('fill'=='green')
-{d3.select(this).style('fill',function(d){ console.log('yes'); for (var j=0; j<countryList.length; j++){
-c=countryList[j].key.split(',')
-if (d.id==c[1]){console.log('yes');return colorScale(nested_data[j].values.length)}
-
-
-}})}*/
-})
+// //call the year filter and genre and rating and table
+// 
+// //console.log(mList)
+// 
+// /*else if ('fill'=='green')
+// {d3.select(this).style('fill',function(d){ console.log('yes'); for (var j=0; j<countryList.length; j++){
+// c=countryList[j].key.split(',')
+// if (d.id==c[1]){console.log('yes');return colorScale(nested_data[j].values.length)}
+// 
+// 
+// }})}*/
+ })
 
 //console.log(nested_data[4].values.length)
 //var hashMap={}

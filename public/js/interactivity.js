@@ -37,6 +37,7 @@ Interactivity.prototype.updatedYearFilter = function(selectedYears) {
      * self.ratingGenreFilter.update(filteredMovies);
      * self.mapFilter.update(filteredMovies);
      */
+     
 
 };
 
