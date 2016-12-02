@@ -379,11 +379,7 @@ span#academyInfo {
     height: 500px;
 }
 
-/* rating-genre styles */
 
-#rating_genre_filter_div {
-    height:600px;
-}
 
 /* year filter styles*/
 
@@ -391,29 +387,68 @@ span#academyInfo {
     height: 100px;
 }
 
-/*genrerate*/
-.svgratinggenre{
+.yearFilterContainer{
+    padding: 30px;
+}
 
+.yearFilterSvg{
     /* background-color: #f0c3e7;*/
 }
 
-.axistext{
-
-    font-size: 15px;
+.Year_xaxis_Text{
+    font-size: 17px;
     font-weight: bold;
     font-family: Times New Roman;
 }
 
-.xlabel{
+.text_year_selcted{
+    font-size: 15px;
+    font-family: sans-serif;
+}
 
+#yearPath{
+    fill: rgb(199, 233, 180) /*rgb(127, 205, 187)*/;
+}
+
+#yearLine{
+    fill:none;
+    stroke: rgb(34, 94, 168);
+    stroke-width:3px;
+}
+
+/* rating-genre styles */
+
+#rating_genre_filter_div {
+    height:600px;
+}
+
+.ratingGenreContainer{
+    padding: 20px;
+}
+
+.svgratinggenre{
+    /* background-color: #f0c3e7;*/
+}
+
+.axistext{
+    font-size: 15px;
+    font-weight: bold;
+    font-family: Times New Roman;
+    text-anchor:end;
+    dx: -.8em;
+    dy:.15em;
+}
+
+.xlabel{
     font-family: Times New Roman;
     text-anchor: middle;
     font-size: 20px;
     font-weight: bold;
 }
+
 .grid line {
-    stroke: #ea12f0;
-    stroke-opacity: 1;
+    stroke: lightsteelblue;
+    stroke-opacity: 2;
     stroke-dasharray: 3;
 }
 
@@ -436,8 +471,6 @@ div.tooltip {
     color: #fff;
     line-height: 1;
     margin-top: 0px;
-
-
 }
 
 div.tooltip:after {
@@ -449,10 +482,9 @@ div.tooltip:after {
     color: rgba(0, 0, 0, 0.8);
     content: "\25BC";
     position: absolute;
-    top: 20px;
-    right: 41px;
+    top: 42px;
+    right: 0px;
     text-align: center;
-    transform: rotate(90deg);
 }
 
 div.tooltip.n:after {
@@ -461,6 +493,9 @@ div.tooltip.n:after {
     left: 100%;
 }
 
+.selected{
+    stroke-width:5px;
+}
 
 /*SIDEBAR STYLES*/
 
