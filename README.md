@@ -94,4 +94,8 @@ Lets consider the following scenario.
 * Selecting a particular movie from the *Table* will update the *Graph* and the *Information view*. 
 * Selecting a different movie in the *Graph* will update the existing *Graph* and the *Information view*.
 
+### Website And Demo
 
+The public website of the visualization is available at [https://saharmehrpour.github.io/dataviscourse-pr-MoviesVisualization/](https://saharmehrpour.github.io/dataviscourse-pr-MoviesVisualization/).
+
+A two-minute demo is available on Youtube: [https://www.youtube.com/](https://www.youtube.com/).
