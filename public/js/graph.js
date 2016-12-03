@@ -301,7 +301,7 @@ Graph.prototype.refresh = function () {
         if (d.type == 'm')
             return 'images/movie.png';
         else if (d.type === 'd')
-            return 'images/director.png';
+            return 'images/Director.png';
         else if (d.type === 'g')
             return 'images/' + d.id + '.png';
         else
@@ -372,7 +372,7 @@ Graph.prototype.refresh = function () {
             if (d.type == 'm')
                 return 'images/movie.png';
             else if (d.type === 'd')
-                return 'images/director.png';
+                return 'images/Director.png';
             else if (d.type === 'g')
                 return 'images/' + d.id + '.png';
             else

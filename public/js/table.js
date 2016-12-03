@@ -49,7 +49,7 @@ Table.prototype.init = function() {
 
     self.createSortOptions();
 
-    self.header = ["number Of Movies", "Average Rating (5-Star)", "Budget", "Gross"];
+    self.header = ["Number Of Movies", "Average Rating (5-Star)", "Budget", "Gross"];
 
     self.computeXscales(self.movies);
 
@@ -61,7 +61,9 @@ Table.prototype.init = function() {
         .attr("class", function (d, i) {
             return "headerCell headerCell" + i;
         })
-        .html(function (d) {
+        .html(function (d,i) {
+            if(i==1)
+                return "Average Rating" + "<br/>" + "(5-Star)";
             return d
         });
 
