@@ -85,8 +85,6 @@ Interactivity.prototype.updatedGenreRatingFilter = function(genresRatings) {
         return yearCheck && countryCheck && genresRatingCheck;
     });
 
-    console.log(filteredMovie.length);
-
 
     self.mapFilter.updateMap(filteredMovie);
     self.table.update(filteredMovie);
