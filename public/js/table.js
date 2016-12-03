@@ -32,7 +32,7 @@ Table.prototype.init = function() {
     self.sortOptions = [{"Option": "title_year", "Text": "Year", "Order": 0},
         {"Option": "country", "Text": "Country", "Order": 1},
         {"Option": "imdb_score", "Text": "Rating", "Order": 2},
-        {"Option": "alph", "Text": "Alphabet.", "Order": 3},
+        {"Option": "alph", "Text": "Alphabet", "Order": 3},
         {"Option" : "gross", "Text" : "Gross", "Order": 4},
         {"Option" : "budget", "Text" : "Budget", "Order": 5},
         {"Option" : "content_rating", "Text" : "Content", "Order": 6}];
@@ -49,7 +49,7 @@ Table.prototype.init = function() {
 
     self.createSortOptions();
 
-    self.header = ["number Of Movies", "Average Rating (5-Star)", "Budget", "Gross"];
+    self.header = ["Number Of Movies", "Average Rating (5-Star)", "Budget", "Gross"];
 
     self.computeXscales(self.movies);
 
@@ -61,7 +61,9 @@ Table.prototype.init = function() {
         .attr("class", function (d, i) {
             return "headerCell headerCell" + i;
         })
-        .html(function (d) {
+        .html(function (d,i) {
+            if(i==1)
+                return "Average Rating" + "<br/>" + "(5-Star)";
             return d
         });
 

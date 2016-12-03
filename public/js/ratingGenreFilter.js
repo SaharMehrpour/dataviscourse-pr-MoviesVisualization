@@ -72,7 +72,7 @@ RatingGenreFilter.prototype.init = function() {
     self.svg.append("text")
         .attr("transform",
             "translate(" + (self.svgWidth / 2) + " ," +
-            (self.svgHeight + self.margin.top - 30) + ")")
+            (self.svgHeight + self.margin.top-45) + ")")
         .attr("class", "xlabel")
         .text("Genre (Movies May Contain Multiple Genres)");
 
@@ -220,7 +220,7 @@ RatingGenreFilter.prototype.update = function(newMovieset) {
 
     rating
         .attr("r", function (d) {
-            if (d.count > 5)
+            if (d.count > 1)
                 return size(d.count);
         })
         .attr("cy", function (d) {
