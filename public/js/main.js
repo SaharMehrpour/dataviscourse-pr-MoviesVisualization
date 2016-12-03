@@ -4,6 +4,8 @@
     function init() {
         //Creating instances for each visualization
 
+        $("#titleImage").hide();
+
         openNav();
 
         var interactivity = new Interactivity();
@@ -26,6 +28,18 @@
                             var graph = new Graph(movies, interactivity);
 
                             interactivity.init(yearFilter, ratingGenreFilter, mapFilter, table, information, graph, movies);
+
+                            toggleNav();
+
+
+                            firstTime = true;
+
+                            $(".loader").fadeOut("slow");
+
+                            var movie = movies.find(x => x.movie_title.trim() === "Yu-Gi-Oh! Duel Monsters");
+
+                            graph.update(movie);
+                            information.update(movie);
 
                         });
                     });
@@ -63,22 +77,35 @@
     Main.getInstance();
 })();
 
-/* Set the width of the side navigation to 250px */
-function openNav() {
-    document.getElementById("sideBar").style.width = "50%";
-    document.getElementById("main").style.marginLeft = "50%";
+open = true;
+
+firstTime = false;
+
+function toggleNav()
+{
+    if (firstTime) {
+        var element = document.getElementById("movieImage");
+        element.parentNode.removeChild(element);
+        firstTime = false;
+        $("#titleImage").fadeIn("slow");
+    }
+
+    if (open)
+        closeNav();
+    else
+        openNav();
+
+    open = !open;
 }
 
-/* Set the width of the side navigation to 0 */
+function openNav() {
+    document.getElementById("sideBar").style.width = "60%";
+    document.getElementById("main").style.marginLeft = "60%";
+    document.getElementById("main").style.width = "40%";
+}
+
 function closeNav() {
     document.getElementById("sideBar").style.width = "0";
     document.getElementById("main").style.marginLeft = "0";
-}
-
-function showInfo() {
-    document.getElementById("groupInfo").style.visibility = "visible";
-}
-
-function hideInfo() {
-    document.getElementById("groupInfo").style.visibility = "hidden";
+    document.getElementById("main").style.width = "100%";
 }

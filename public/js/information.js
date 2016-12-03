@@ -182,8 +182,6 @@ Information.prototype.init = function() {
 
     self.createToolTip();
 
-    self.update(self.movies[2607]);
-
 };
 
 /*

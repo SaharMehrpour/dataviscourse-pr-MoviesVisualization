@@ -64,10 +64,6 @@ Graph.prototype.init = function() {
         .attr('in2', 'the-shadow')
         .attr('mode', 'normal');
 
-    //placeholder for testing
-    var movie = self.movies.find(x => x.movie_title.trim() === "The Departed");
-
-    self.update(movie);
 };
 
 Graph.prototype.artistMovies = function(artistName) {
@@ -330,8 +326,63 @@ Graph.prototype.refresh = function () {
                 return imageHeight * -1.5 / 2;
             else
                 return imageHeight / -2;
+        })
+        .on("click",function(d) {
+            if (d.type === 'm') {
+                if (d.id == selectedMovie.movie_title)
+                {
+                    var ele = document.getElementById("infoJump");
+
+                    ele.scrollIntoView({block: "start", behavior: "smooth"});
+                }
+                else {
+
+                    self.update(d.data);
+
+                    self.interactivity.updatedGraph(d.data);
+
+                }
+
+                window.clearTimeout(this.hoverTimeout);
+
+                if (d.fx != null)
+                    self.removeGenreNodes(d);
+
+                d.fx = null;
+                d.fy = null;
+
+                self.fade(d,1);
+            }
+        })
+        .on("mouseover", function(d,i) {
+
+
+            if (d.type == "m") {
+                this.hoverTimeout = window.setTimeout(self.addGenreNodes.bind(self), 1000, d, this);
+            }
+
+
+            self.fade(d,0.1);
+
+        })
+        .on("mouseout", function(d) {
+
+
+
+            if(d.type == "m") {
+                var tm = window.clearTimeout(this.hoverTimeout);
+
+                if (d.fx != null)
+                    self.removeGenreNodes(d);
+
+                d.fx = null;
+                d.fy = null;
+            }
+
+            self.fade(d,1);
+
         });
-        //.attr("filter","url(#dropShadow)");
+
 
     nodeGroups.select("text")
         .text(function(d) {
@@ -404,7 +455,17 @@ Graph.prototype.refresh = function () {
         })
         .on("click",function(d) {
             if (d.type === 'm') {
-                self.update(self.movies.find(x => x.movie_title === d.id));
+                if (d.id == selectedMovie.movie_title)
+                {
+                    var ele = document.getElementById("infoJump");
+
+                    ele.scrollIntoView({block: "start", behavior: "smooth"});
+                }
+                else {
+                    self.update(d.data);
+
+                    self.interactivity.updatedGraph(d.data);
+                }
 
                 window.clearTimeout(this.hoverTimeout);
 

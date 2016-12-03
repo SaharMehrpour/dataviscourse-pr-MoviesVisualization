@@ -130,6 +130,11 @@ Interactivity.prototype.updatedTable = function(selectedMovie) {
     self.information.update(selectedMovie);
     self.graph.update(selectedMovie);
 
+    var ele = document.getElementById("graph_div");
+
+    closeNav();
+
+    ele.scrollIntoView({block: "end", behavior: "smooth"});
 };
 
 

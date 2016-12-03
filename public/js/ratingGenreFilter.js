@@ -230,7 +230,7 @@ RatingGenreFilter.prototype.update = function(newMovieset) {
         .attr("cx", function (d) {
             //return d.x;
             //56
-            console.log(self.svgWidth/13);
+            //console.log(self.svgWidth/13);
             return x(d["genre"])+56;
         })
         .style("fill", function (d) {
