@@ -342,8 +342,6 @@ Information.prototype.getAcademyInfo = function (selectedMovie) {
             if (d3.select("#main").style("margin-left") == "0px") {
 
                 self.tip
-                    .style("left", (d3.event.pageX / 2 + 20) + "px")
-                    .style("top", (d3.event.pageY / 2 - 140) + "px")
                     .html(
                         "Academy Award" + "<br/>" + "for" + "<br/>" + "best " + d
                     )
@@ -374,7 +372,8 @@ Information.prototype.getAcademyInfo = function (selectedMovie) {
 Information.prototype.createToolTip = function () {
     var self = this;
 
-    self.tip = self.div.append("div")
+    self.tip = self.div.select(".statueDiv")
+    	.append("div")
         .attr("class","infoTip")
         .style("opacity","0");
 
