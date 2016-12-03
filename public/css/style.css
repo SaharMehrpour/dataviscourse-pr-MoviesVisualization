@@ -189,7 +189,7 @@ h1 {
 
 .sortOptionRect {
     height: 40px;
-    fill: gainsboro;
+    fill: rgb(199, 233, 180);
     opacity: 0.5;
 }
 
