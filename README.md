@@ -13,18 +13,22 @@ In the left column, there are several views: "*Year Filter*", "*Rating-Genre Fil
 
 This filter helps user to filter movies based on a specific range of consecutive years. The number of movies in each year is presented by a line chart. The main purpose of the line chart here is to give a general idea about the distribution of movies over years. So, there is no Y-axis for this chart. The selection is done by using a brush.
 
-![Year Filter1](figs/year.PNG)
+
+<img src="figs/year.PNG" width="70%">
+
 
 Brush applied in *Year Filter* :
 
-![Year Filter2](figs/year2.PNG)
+<img src="figs/year2.PNG" width="70%">
+
 
 ### Rating-Genre Filter
 
 This filter helps user to filter movies based on specific genres and ratings. In this chart the ratings are rounded and the genres with few movies are grouped in one genre, "*Other*". The number of movies in each rating-genre is coded by color and size. Since the number of movies are not distributed evenly, a logarithmic scale is used for both color and size. There is also a search box which helps user to find a specific country on the Map.
 Selecting and unselecting is done by clicking on a circle.
 
-![Rating Filter](figs/RatingGenre.PNG)
+<img src="figs/RatingGenre.PNG" width="70%">
+
 
 
 ### Map Filter
@@ -32,10 +36,11 @@ Selecting and unselecting is done by clicking on a circle.
 The purpose of the Map filter is to give an insight about the number of movies produced in each country. The map is zoomable nad draggable. The number of movies is coded by a color on each country. The scale here is quantized due to the lopsided nature of the data set so that the colour distribution looks most appealing while giving apt information via the legend.
 Selecting and unselecting is done by clicking on a country.
 
-![Map Filter1](figs/map.PNG)
+<img src="figs/map.PNG" width="70%">
+
 
 Selecting and unselecting is done by clicking on a country.
-![Map Filter2](figs/map2.PNG)
+<img src="figs/map2.PNG" width="70%">
 
 
 ### Table
@@ -43,22 +48,24 @@ Selecting and unselecting is done by clicking on a country.
 The Table shows the movie list filtered based on the earlier selection in *Year Filter*, *Rating-Genre Filter*, and *Map Filter*. The table has several grouping options: "*Year*", (IMDB) "*Rating*", "*Country*", "*Budget*", "*Gross*", and "*Alphabet.*" (Alphabetical). The user can select and order grouping options by dragging the option buttons. Clicking on "Apply" will apply the grouping on the (filtered) movie set. The table has several columns: grouped title, number of movies, average rating, distribution of gross, distribution of budget. In the table the ratings are converted to 5.0 scale (*E.g.* rating 8.4 will be shown as 4.2). The distribution of gross and budget are shown with [box plots](https://en.wikipedia.org/wiki/Box_plot). The grouping options are applied in sequence. That is by selecting a row of some subgroup, the next grouping option is applied to the movies of that subgroup.
 The user can select a movie by clicking on a row displaying information of a single movie (shown with bold text).
 
-![Table Filter](figs/table.PNG)
+<img src="figs/table.PNG" width="70%">
 
 ### Graph
 
 The purpose of the graph is to explore the relation between actors, movies, and directors. The participation is shown with edges, while nodes indicate movies, actors, or directors. The center of the graph is one specific movie. Hovering on a movie shows the genres of that movie. Clicking on a movie will change the center of the graph to that movie.
 
-![Grapg Filter1](figs/graph.PNG)
+<img src="figs/graph.PNG" width="70%">
+
 
 When we hover on a movie, the graph shows the following graph:
 
-![Graph Filter2](figs/graph2.PNG)
+<img src="figs/graph2.PNG" width="70%">
 
 When we hover on an actor or director, the graph shows the following graph:
 
 
-![Graph Filter3](figs/map3.PNG)
+<img src="figs/map3.PNG" width="70%">
+
 
 
 ### Information
