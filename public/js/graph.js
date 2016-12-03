@@ -32,7 +32,7 @@ Graph.prototype.init = function() {
     //Gets access to the div element created for this chart from HTML
     self.svgBounds = divvotesPercentage.node().getBoundingClientRect();
     self.svgWidth = self.svgBounds.width - self.margin.left - self.margin.right;
-    self.svgHeight = 1000;
+    self.svgHeight = 1500;
 
     //creates svg element within the div
     self.svg = divvotesPercentage.append("svg")
@@ -292,6 +292,8 @@ Graph.prototype.refresh = function () {
 
     var imageHeight = imageWidth = 50;
 
+    var selectedMovieFactor = 2;
+
     nodeGroups.select('image')
         .attr('xlink:href',function(d) {
         if (d.type == 'm')
@@ -304,26 +306,26 @@ Graph.prototype.refresh = function () {
             return 'images/actor.png'
         })
         .attr('height', function (d) {
-            if (d.id === selectedMovie.movie_title)
-                return imageHeight * 1.5;
+            if (d.id === selectedMovie.movie_title || d.type === "g")
+                return imageHeight * selectedMovieFactor;
             else
                 return imageHeight;
         })
         .attr('width', function(d) {
-            if (d.id === selectedMovie.movie_title)
-                return imageWidth * 1.5;
+            if (d.id === selectedMovie.movie_title || d.type === "g")
+                return imageWidth * selectedMovieFactor;
             else
                 return imageWidth;
         })
         .attr('x', function(d) {
-            if (d.id === selectedMovie.movie_title)
-                return imageWidth * -1.5 / 2;
+            if (d.id === selectedMovie.movie_title || d.type === "g")
+                return imageWidth * -selectedMovieFactor / 2;
             else
                 return imageWidth / -2;
         })
         .attr('y', function(d) {
-            if (d.id === selectedMovie.movie_title)
-                return imageHeight * -1.5 / 2;
+            if (d.id === selectedMovie.movie_title  || d.type === "g")
+                return imageHeight * -selectedMovieFactor / 2;
             else
                 return imageHeight / -2;
         })
@@ -430,26 +432,26 @@ Graph.prototype.refresh = function () {
                 return 'images/actor.png'
         })
         .attr('height', function (d) {
-            if (d.id === selectedMovie.movie_title)
-                return imageHeight * 1.5;
+            if (d.id === selectedMovie.movie_title || d.type === "g")
+                return imageHeight * selectedMovieFactor;
             else
                 return imageHeight;
         })
         .attr('width', function(d) {
-            if (d.id === selectedMovie.movie_title)
-                return imageWidth * 1.5;
+            if (d.id === selectedMovie.movie_title || d.type === "g")
+                return imageWidth * selectedMovieFactor;
             else
                 return imageWidth;
         })
         .attr('x', function(d) {
-            if (d.id === selectedMovie.movie_title)
-                return imageWidth * -1.5 / 2;
+            if (d.id === selectedMovie.movie_title || d.type === "g")
+                return imageWidth * -selectedMovieFactor / 2;
             else
                 return imageWidth / -2;
         })
         .attr('y', function(d) {
-            if (d.id === selectedMovie.movie_title)
-                return imageHeight * -1.5 / 2;
+            if (d.id === selectedMovie.movie_title || d.type === "g")
+                return imageHeight * -selectedMovieFactor / 2;
             else
                 return imageHeight / -2;
         })
@@ -663,7 +665,7 @@ Graph.prototype.update = function(selectedMovie) {
                 return radius + (20 * d.parents.length);
             }
             else if (d.type == "g")
-                return radius + 20;
+                return radius + 30;
             else
                 return radius * 10;
         }).strength(0.2).iterations(1) )
