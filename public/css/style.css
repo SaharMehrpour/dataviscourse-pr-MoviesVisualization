@@ -354,23 +354,36 @@ span#academyInfo {
 
 .nodes {
     r:5;
-    font-size:12px;
+    font-size:0px;
 }
 
 .artist {
-    fill:#000;
+    fill:rgb(34, 94, 168);
+    font-size: 17px;
+    font-weight: bold;
+    font-family: Times New Roman;
+
 }
 
 .movie {
-    fill:#f00;
+    fill: rgb(29, 145, 192);
+    font-size: 13px;
+    font-weight: bold;
+    font-family: Times New Roman;
+
+
 }
 
 .selectedMovie {
-    fill: #0f0;
+
+    fill:rgb(12, 44, 132);
+    font-size: 20px;
+    font-weight: bold;
+    font-family: Times New Roman;
 }
 
 .genre {
-    fill: #000;
+    font-size: 10px;
 }
 
 /* Map Styles */
@@ -432,7 +445,7 @@ span#academyInfo {
 }
 
 .axistext{
-    font-size: 15px;
+    font-size: 13px;
     font-weight: bold;
     font-family: Times New Roman;
     text-anchor:end;
@@ -443,7 +456,7 @@ span#academyInfo {
 .xlabel{
     font-family: Times New Roman;
     text-anchor: middle;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
 }
 
