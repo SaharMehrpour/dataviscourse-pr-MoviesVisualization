@@ -79,7 +79,7 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
 	// Draw map
 	var self = this;
 	//console.log(movieList)
-	d3.selectAll('path').attr('fill','whitesmoke')
+	self.div.selectAll('path').attr('fill','whitesmoke')
 	var colorScale = d3.scaleQuantile()
 	//.domain([20,1500]).range(['#ccebff','#0000b3'])
 		.domain([10,20,50,120,130,1000])
