@@ -10,13 +10,18 @@ function MapFilter(movies, interactivity) {
     self.interactivity = interactivity;
     self.movies = movies;
 
-    self.div = d3.select("#map_filter_div").append('div').style('padding','25px');
-
+    self.div = d3.select("#map_filter_div").append('div').style('padding','25px 25px 25px 25px');
+	//console.log(self.div.width)
     self.init();
 };
 
 MapFilter.prototype.init = function(){
 	var self = this;
+	self.svgBounds = self.div .node().getBoundingClientRect();
+    self.svgWidth = self.svgBounds.width-50
+    self.svgHeight = 1000;
+    //console.log(self.svgHeight)
+	
 	d3.csv("data/movie_metadata.csv", function (error, data)
 
     {movies=data
@@ -34,18 +39,14 @@ MapFilter.prototype.init = function(){
 
 		if (d3.event.keyCode == 13)
 		
-			
-			//console.log(d3.select(this).property("value"));
-			return search(d3.select(this).property("value"));
+
+		return search(d3.select(this).property("value"));
 			
 	
 	});
 
 	
-    self.svg = self.div.append("svg").attr('padding','10').attr('height',400).attr('width',1400).attr('id','map');//.call(d3.zoom().on("zoom", function () {
-    //self.svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
- // })).append('g')
-	//self.svg=self.div.append("svg").
+    self.svg = self.div.append("svg").attr('padding','10').attr('height',400).attr('width',self.svgWidth).attr('id','map');//.call(d3.zoom().on("zoom", function () {
 	self.tooltip = self.div
     .append("div")
     .style("position", "absolute")
@@ -107,51 +108,9 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
 
     d3.json("data/world.json",function(json){//console.log(json)
     
-   //  tooltip_render = function (tooltip_data) {
-//     var self = this;
-//     //var text = "<h2 class ="  + (tooltip_data) + " >" + tooltip_data.state + "</h2>";
-//     // text +=  "Electoral Votes: " + tooltip_data.electoralVotes;
-// //     text += "<ul>"
-// //     text += "</ul>";
-// 	console.log(tooltip_data)
-// 	var text = tooltip_data.state;
-//     return text;
-// }
-//     
-//         tip = d3.tip().attr('class', 'd3-tip')
-//         .direction('se')
-//         .offset(function() {
-//             return [0,0];
-//         })
-//         .html(function(d) {
-//         	 console.log("yes")
-//            //  populate data in the following format
-//               tooltip_data = {
-//               "state": 'yes'
-//               }
-//              // pass this as an argument to the tooltip_render function then,
-//              // return the HTML content returned from that method.
-//              
-//             return tooltip_render(tooltip_data);
-//         });
-//     
-// 		self.svg.select('g').call(tip);
 
-// var tip = d3.tip()
-//       .attr("class", "d3-tip")
-//       .offset([-8, 0])
-//       .html(function(d) { console.log(d.id);return "Radius: " + d.id; });
-//     self.svg.select('g').call(tip);
-//         var div = self.div.append("div")
-//         .attr("class", "tooltip")
-//         .style("opacity", function(d){//console.log("yes; I exist");
-//         return 0});
-
-//         var tooltip = d3.select('#map_filter_div').append('div')
-//             .style('display', 'none');
 
     var div = self.div.append("div")
-        //.attr("class", "tooltip")
         .style("opacity", 0);
         
         var map=self.svg.select('g').selectAll("path")
@@ -159,7 +118,7 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
         map.exit().remove
         map.enter()
             .append("path")
-            .attr('id',function(d){//console.log(movieList[6].country)
+            .attr('id',function(d){
             return d.id})
             .attr("d",path)
             .attr("stroke","gray")
@@ -167,11 +126,7 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
             .attr('transform','translate(20,60)')
             .attr("fill", "whitesmoke")
             .attr("opacity",0.75)
-            //#000099
             .on("mouseover",function(d){
-//               var mouse = d3.mouse(svg.node()).map(function(d) {//console.log(parseInt(d))
-//                          return parseInt(d);
-//                     });
 				d3.select(this).attr('stroke','black').attr('stroke-width',1);
             div.transition()
                 //.duration(20)
@@ -187,12 +142,8 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
 					}}})
 					
 
-            })       
+            })     
             .on("mouseout",function(){
-            //tooltip.style('display','none');
-//              div.transition()
-         //        .duration(5)
-//                 .style("opacity", 0);
 				div.transition()
                 .duration(500)
                 .style("opacity", 0);
@@ -221,22 +172,10 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
 
 			listed(IList,cList)
 
-// //call the year filter and genre and rating and table
-// 
-// //console.log(mList)
-// 
-// /*else if ('fill'=='green')
-// {d3.select(this).style('fill',function(d){ console.log('yes'); for (var j=0; j<countryList.length; j++){
-// c=countryList[j].key.split(',')
-// if (d.id==c[1]){console.log('yes');return colorScale(nested_data[j].values.length)}
-// 
-// 
-// }})}*/
+
  })
 
-//console.log(nested_data[4].values.length)
-//var hashMap={}
-//forEach
+
 	list=[]
 	for (var i = 0; i < nested_data.length; i++) {
 	//console.log(nested_data[i].key)
@@ -277,17 +216,11 @@ MapFilter.prototype.drawMap = function(movieList,country,text){
 		.on("zoom", zoomed);
 	
 	self.svg.select('g')
-// 		.call(zoom.translateBy, 150,450)
-// 		.call(zoom.scaleBy, 200)
+
 		.call(zoom);
 	function zoomed() {
 
-//	console.log("here");	
-	//console.log(d3.event);
 
-// 	  self.svg
-// 		  .call(zoom.translateBy, 10,10)
-// 		  .call(zoom.scaleBy, 50);
 
 	self.svg.select('g')
 	.attr("transform", "translate(" + d3.event.transform.x + "," + d3.event.transform.y + ") scale(" + d3.event.transform.k + ")");
@@ -309,26 +242,7 @@ function dragged(d) {
 function dragended(d) {
   d3.select(this).classed("dragging", false);
 }
-// var drag=d3.drag()
-// 	.origin(function(d) { return d; })
-//     .on("dragstart", dragstarted)
-//     .on("drag", dragged)
-//     .on("dragend", dragended);
-// // 	  g.selectAll("path")
-// self.svg.select('g').call(drag)
-// function dragstarted(d) {
-//   d3.event.sourceEvent.stopPropagation();
-//   d3.select(this).classed("dragging", true);
-// }
-// 
-// function dragged(d) {
-//   d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
-// }
-// 
-// function dragended(d) {
-//   d3.select(this).classed("dragging", false);
-// }
-// 		  .attr("d", path);
+
 	}
 
 })
@@ -348,9 +262,7 @@ svg.append("g")
 
 var legend = d3.legendColor()
 .labels(["1-20", "20-50", "50-120", "120-150","150-500","500-1000", ">1000"])
-  //.labelFormat(d3.format("%"))
-  //.useClass(true)
-  .scale(quantize)
+.scale(quantize)
 
  // .orient('horizontal');
 

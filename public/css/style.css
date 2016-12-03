@@ -194,7 +194,7 @@ h1 {
 }
 
 .activeFilter > rect {
-    fill: dimgray
+    fill: darkcyan
 }
 
 .textFilter {
@@ -283,7 +283,7 @@ span#academyInfo {
 
 .infoTip {
     background-color: #bdbdbd;
-    position: absolute;
+    float : left;
     text-align: center;
     border: solid 1px darkgray;
 }
