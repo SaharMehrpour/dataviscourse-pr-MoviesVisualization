@@ -98,4 +98,4 @@ Lets consider the following scenario.
 
 The public website of the visualization is available at [https://saharmehrpour.github.io/dataviscourse-pr-MoviesVisualization/](https://saharmehrpour.github.io/dataviscourse-pr-MoviesVisualization/).
 
-A two-minute demo is available on Youtube: [https://www.youtube.com/](https://www.youtube.com/).
+A two-minute demo is available on Youtube: [https://youtu.be/_eH4OpZGCIo](https://youtu.be/_eH4OpZGCIo).
